@@ -1,0 +1,268 @@
+{
+    "code": "en-US",
+    "vars": {
+        "error": "An error occurred when I tried to execute this operation. Please, try again in a while.",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "undefined": "Undefined",
+        "gettingStarted": "Getting Started",
+        "tos": "Terms of Service",
+        "privacyPolicy": "Privacy Policy"
+    },
+    "commands": {
+        "ban": {
+            "command": {
+                "name": "ban",
+                "description": "Bans a server from using the bot.",
+                "options": [
+                    {
+                        "name": "id",
+                        "description": "Guild's id."
+                    },
+                    {
+                        "name": "reason",
+                        "description": "Ban reason."
+                    }
+                ]
+            },
+            "texts": {
+                "error": "Unfortunately this guild is banned from using my services :/\n\n**Reason:** `{{reason}}`.",
+                "success": "`{{guild}}` has been banned!\n\n**Reason:** `{{reason}}`."
+            }
+        },
+        "chance": {
+            "command": {
+                "name": "chance",
+                "description": "Defines the chances."
+            }
+        },
+        "channel": {
+            "command": {
+                "name": "channel",
+                "description": "Defines the channel the bot will send and collect the messages.",
+                "options": [
+                    {
+                        "name": "channel",
+                        "description": "Channel to be defined."
+                    }
+                ]
+            },
+            "texts": {
+                "error": "The channel type provided must be text.",
+                "success": "The channel {{channel}} has been defined to collect and send messages."
+            }
+        },
+        "config": {
+            "command": {
+                "name": "config",
+                "description": "Configures the bot on the server."
+            },
+            "error": "You have no permission (**Administrator**) to use this command."
+        },
+        "collectChance": {
+            "command": {
+                "name": "collect",
+                "description": "Chance to collect a message.",
+                "options": [
+                    {
+                        "name": "chance",
+                        "description": "Chance to be defined."
+                    }
+                ]
+            },
+            "text": "Chance to collect a message defined to `{{chance}}%`."
+        },
+        "deleteTexts": {
+            "command": {
+                "name": "deletetexts",
+                "description": "Delete all the texts stored.",
+                "options": [
+                    {
+                        "name": "member",
+                        "description": "Delete all the member stored texts."
+                    }
+                ]
+            },
+            "texts": {
+                "confirmButton": "Confirm",
+                "cancelButton": "Cancel",
+                "confirmation": "Are you sure that you want to delete `{{textsLength}}` stored messages?",
+                "notexts": "There's no texts stored.",
+                "nopermission": "You are not allowed to delete messages.\n\nIf you want to delete your stored messages, please provide the parameter **` member `**.",
+                "success": "`{{textsLength}}` stored messages were deleted successfully.",
+                "cancel": "Operation canceled."
+            }
+        },
+        "disable": {
+            "command": {
+                "name": "disable",
+                "description": "Disables the collection and sending of messages."
+            },
+            "text": "Collection and sending of messages disabled."
+        },
+        "donate": {
+            "title": "Donate!",
+            "cryptoTitle": "Don't use fiat currencies? No problem! XD",
+            "description": "Initially suggested by friends, I became bigger. With bigger applications, bigger is the requirement for maintenance.\n\nCurrently, I'm being hosted by my developer's friend, <:twitter:960204380563460227> [**@LukeFl_**](https://twitter.com/lukefl_) (thx!), but a day this dependence will need to go. That's why I need your support! *Since my developer is still a student xd*.\n\n{{urls}}",
+            "footer": "If you don't have conditions, your appreciation is already very welcome!"
+        },
+        "enable": {
+            "command": {
+                "name": "enable",
+                "description": "Enables the collection and sending of messages."
+            },
+            "text": "Collection and sending of messages enabled."
+        },
+        "generate": {
+            "command": {
+                "name": "gen",
+                "description": "Generates a message.",
+                "options": [
+                    {
+                        "name": "amount",
+                        "description": "Max. number of words in the text."
+                    }
+                ]
+            },
+            "error": "I don't have enough content to generate a text :("
+        },
+        "info": {
+            "command": {
+                "name": "info",
+                "description": "Shows bot's information."
+            },
+            "texts": {
+                "title": "INFORMATION",
+                "serverField": "SERVER",
+                "softwareField": "SOFTWARE",
+                "online": "\\> Online since: {{time}}",
+                "serverSize": "\\> On approximately `{{size}}` servers.",
+                "tracking": "\\> Collecting your messages: `{{state}}`.",
+                "banned": "\\> This guild is banned: `{{reason}}`.",
+                "state": "\\> State: `{{state}}`.",
+                "channel": "\\> Defined channel: {{channel}}{{permission}}.",
+                "webhook": "\\> Defined Webhook: `{{webhook}}`.",
+                "textsLength": "\\> Stored texts: `{{length}}`.",
+                "textsLimit": "\\> Texts limit: `{{limit}}`.",
+                "collectChance": "\\> Collection chance: `{{chance}}`.",
+                "sendingChance": "\\> Sending chance: `{{chance}}`.",
+                "nodeVersion": "\\> Node.js version: `{{version}}`.",
+                "djsVersion": "\\> Discord.js version: `{{version}}`.",
+                "memUsage": "\\> Memory usage: `{{mem}}`.",
+                "developer": "\\> Developer: {{dev}}.",
+                "donate": "Donate",
+                "faq": "FAQ",
+                "cutecats": "Cute Cats",
+                "nopermission": "no permission"
+            }
+        },
+        "limit": {
+            "command": {
+                "name": "limit",
+                "description": "Defines the stored messages limit.",
+                "options": [
+                    {
+                        "name": "limit",
+                        "description": "Messages limit (recommended: {{recommend}})"
+                    }
+                ]
+            },
+            "text": "Stored messages limit defined to `{{limit}}`.\n\n**Tip:** lower limits increase the chance of texts with more sense."
+        },
+        "ping": {
+            "command": {
+                "name": "ping",
+                "description": "Shows the latency between the bot and Discord."
+            },
+            "text": "🏓 **Ping**: {{ping}} ms."
+        },
+        "sendChance": {
+            "command": {
+                "name": "send",
+                "description": "Chance to send a message.",
+                "options": [
+                    {
+                        "name": "chance",
+                        "description": "Chance to be defined."
+                    }
+                ]
+            },
+            "text": "Chance to send a message defined to `{{chance}}%`."
+        },
+        "tracking": {
+            "command": {
+                "name": "tracking",
+                "description": "Toggles whether the bot should collect your messages or not."
+            },
+            "texts": {
+                "enabled": "I'll no longer collect your messages. 😔",
+                "disabled": "I'll collect your messages again. 😊"
+            }
+        },
+        "unban": {
+            "command": {
+                "name": "unban",
+                "description": "Unbans a server from using the bot.",
+                "options": [
+                    {
+                        "name": "id",
+                        "description": "Guild's id."
+                    }
+                ]
+            },
+            "texts": {
+                "success": "`{{guild}}` has been unbanned!"
+            }
+        },
+        "webhook": {
+            "command": {
+                "name": "webhook",
+                "description": "Defines a Webhook to send messages.",
+                "options": [
+                    {
+                        "description": "Webhook URL."
+                    }
+                ]
+            },
+            "texts": {
+                "disabled": "Webhook disabled!",
+                "error": "This Webhook looks invalid 🤔 Make sure the URL is valid and the Webhook exists.",
+                "guildError": "This Webhook is not from this guild 🤔",
+                "success": "Webhook `{{name}}` defined! Have fun 🤭\n\nTo disable again you just need to type the same command without parameters 👌"
+            }
+        }
+    },
+    "events": {
+        "welcome": "**Thanks for adding me to the server!**\n\nType `{{channelCommand}}` to set up a channel and then `{{enableCommand}}` to enable me 😁. After collecting {{min}} messages, I'll start generating content 👀. Type `{{infoCommand}}` for more information.\n\nFor every 30 days of inactivity we delete the stored texts. If you want to delete the texts, use the command `{{deleteCommand}}`. The parameter `{{member}}` can be used by the command user or whoever has the message management permission.",
+        "faq": {
+            "title": "FAQ",
+            "description": "Questions? Maybe this can help you. Unlisted questions can be asked to my developer: {{contact}}.",
+            "fields": [
+                {
+                    "name": "How do I delete stored messages?",
+                    "value": "You can delete stored messages using the command `{{deleteCommand}}`. Providing the parameter `{{parameter}}` allows you to delete messages from yourself or a member."
+                },
+                {
+                    "name": "I don't want it to collect my messages!",
+                    "value": "To disable the collection of your messages, type `{{trackingCommand}}`. Type the same command to enable it again."
+                },
+                {
+                    "name": "Does this bot use any complex AI?",
+                    "value": "No. The bot uses [Markov Chains](https://en.wikipedia.org/wiki/Markov_chain), a very simple algorithm that works with probabilities, used in the text generation."
+                },
+                {
+                    "name": "He's generating many non-sense sentences!",
+                    "value": "Currently there's no filter of what is a correct sentence or not, so the bot will randomly try to generate something, which sometimes relates to the context. A lower limit of texts is recommended so he can \"assembles the puzzle\" more accurately."
+                },
+                {
+                    "name": "How was this bot made?",
+                    "value": "The bot was developed using [TypeScript](https://www.typescriptlang.org) (an improvement on JavaScript), using [Discord.js](https://discord.js.org) in [Node.js](https://nodejs.org/en/about). Initially the database was a [JSON](https://pt.wikipedia.org/wiki/JSON) file, but soon [MongoDB](https://en.wikipedia.org/wiki/MongoDB) was used. Currently hosted on a [friend's]({{friendURL}}) host at [DigitalOcean](https://digitalocean.com/)."
+                },
+                {
+                    "name": "Do you have any plans to scale the bot?",
+                    "value": "I'm uncertain about this. The bot started as a study and hobby suggested by friends. As I'm still a young student, I can't afford to keep the bot for a long time, but I'm trying to do my best. Soon I'll make the entire bot's code open source in GitHub, allowing anyone to run their own instance, or if they want, continue his journey."
+                }
+            ]
+        }
+    }
+}

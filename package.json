@@ -1,0 +1,25 @@
+{
+  "name": "markov-bot",
+  "version": "1.0.0",
+  "description": "A bot that generate random texts on Discord chat.",
+  "scripts": {
+    "test": "ts-node ./src",
+    "build": "tsc",
+    "start": "node ./dist",
+    "build-start": "tsc && node ./dist"
+  },
+  "author": "knownasbot",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.0",
+    "i18next": "^21.8.10",
+    "i18next-fs-backend": "^1.1.4",
+    "mongoose": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^4.7.4"
+  }
+}

@@ -1,0 +1,268 @@
+{
+    "code": "pt-BR",
+    "vars": {
+        "error": "Um erro ocorreu enquanto eu tentava executar esta operação. Tente novamente em um tempo.",
+        "enabled": "Habilitado",
+        "disabled": "Desabilitado",
+        "undefined": "Indefinido",
+        "gettingStarted": "Introdução",
+        "tos": "Termos de Serviço",
+        "privacyPolicy": "Política de Privacidade"
+    },
+    "commands": {
+        "ban": {
+            "command": {
+                "name": "banir",
+                "description": "Bane o uso do bot em um servidor.",
+                "options": [
+                    {
+                        "name": "id",
+                        "description": "Id do servidor."
+                    },
+                    {
+                        "name": "motivo",
+                        "description": "Motivo da suspensão."
+                    }
+                ]
+            },
+            "texts": {
+                "error": "Infelizmente este servidor está impedido de utilizar minhas funções :/\n\n**Motivo:** `{{reason}}`.",
+                "success": "`{{guild}}` foi banido!\n\n**Motivo:** `{{reason}}`."
+            }
+        },
+        "chance": {
+            "command": {
+                "name": "chance",
+                "description": "Configura as chances."
+            }
+        },
+        "channel": {
+            "command": {
+                "name": "canal",
+                "description": "Configura o canal em que o bot vai enviar e coletar mensagens.",
+                "options": [
+                    {
+                        "name": "canal",
+                        "description": "Canal a ser configurado."
+                    }
+                ]
+            },
+            "texts": {
+                "error": "O canal fornecido deve ser de texto.",
+                "success": "O canal {{channel}} foi configurado para ser enviado e coletado mensagens."
+            }
+        },
+        "config": {
+            "command": {
+                "name": "configurar",
+                "description": "Configura o bot no servidor."
+            },
+            "error": "Você não tem permissão (**Administrator**) para utilizar esse comando."
+        },
+        "collectChance": {
+            "command": {
+                "name": "coleta",
+                "description": "Chance de coletar uma mensagem do chat.",
+                "options": [
+                    {
+                        "name": "chance",
+                        "description": "Chance a ser definida."
+                    }
+                ]
+            },
+            "text": "Chance de coleta definida para `{{chance}}%`."
+        },
+        "deleteTexts": {
+            "command": {
+                "name": "deletartextos",
+                "description": "Deleta todos os textos armazenados.",
+                "options": [
+                    {
+                        "name": "membro",
+                        "description": "Deleta textos armazenados de um membro em específico."
+                    }
+                ]
+            },
+            "texts": {
+                "confirmButton": "Confirmar",
+                "cancelButton": "Cancelar",
+                "confirmation": "Tem certeza que deseja apagar `{{textsLength}}` mensagens do banco de dados?",
+                "notexts": "Não há textos para deletar.",
+                "nopermission": "Você não possui permissão para apagar as mensagens.\n\nCaso queira deletar suas mensagens armazenadas, forneça o parâmetro **` membro `**.",
+                "success": "Foram deletadas `{{textsLength}}` mensagens do banco de dados.",
+                "cancel": "Operação cancelada."
+            }
+        },
+        "disable": {
+            "command": {
+                "name": "desabilitar",
+                "description": "Desabilita a coleta e envio de mensagens."
+            },
+            "text": "Desabilitado a coleta e envio de mensagens."
+        },
+        "donate": {
+            "title": "Apoie!",
+            "cryptoTitle": "Não usa moedas fiduciárias? Isso não é desculpa! XD",
+            "description": "Surgido inicialmente como uma sugestão de amigos, eu me tornei algo muito maior. Com maiores aplicações, maior a demanda por manuntenções.\n\nAtualmente, estou sendo hospedado pelo amigo do meu desenvolvedor, <:twitter:960204380563460227> [**@LukeFl_**](https://twitter.com/lukefl_) (obrigado!), mas um dia essa dependência precisará acabar. Por isso, contamos com seu apoio! *Já que meu desenvolvedor ainda é um estudante xd*.\n\n{{urls}}",
+            "footer": "Caso não tenha condições, sua apreciação já é muito bem vinda!"
+        },
+        "enable": {
+            "command": {
+                "name": "habilitar",
+                "description": "Habilita a coleta e envio de mensagens."
+            },
+            "text": "Habilitado a coleta e envio de mensagens novamente."
+        },
+        "generate": {
+            "command": {
+                "name": "gerar",
+                "description": "Gera uma mensagem.",
+                "options": [
+                    {
+                        "name": "quantidade",
+                        "description": "Quantidade máxima de palavras no texto."
+                    }
+                ]
+            },
+            "error": "Não tenho conteúdo suficiente para gerar um texto :("
+        },
+        "info": {
+            "command": {
+                "name": "info",
+                "description": "Exibe as informações do bot."
+            },
+            "texts": {
+                "title": "INFORMAÇÕES",
+                "serverField": "SERVIDOR",
+                "softwareField": "SOFTWARE",
+                "online": "\\> Online desde: {{time}}",
+                "serverSize": "\\> Em aproximadamente `{{size}}` servidores.",
+                "tracking": "\\> Coletando suas mensagens: `{{state}}`.",
+                "banned": "\\> Esse servidor está banido: `{{reason}}`.",
+                "state": "\\> Estado: `{{state}}`.",
+                "channel": "\\> Canal configurado: {{channel}}{{permission}}.",
+                "webhook": "\\> Webhook configurado: `{{webhook}}`.",
+                "textsLength": "\\> Textos armazenados: `{{length}}`.",
+                "textsLimit": "\\> Limite de textos: `{{limit}}`.",
+                "collectChance": "\\> Chance de coleta: `{{chance}}`.",
+                "sendingChance": "\\> Chance de envio: `{{chance}}`.",
+                "nodeVersion": "\\> Versão do Node.js: `{{version}}`.",
+                "djsVersion": "\\> Versão do Discord.js: `{{version}}`.",
+                "memUsage": "\\> Uso de memória: `{{mem}}`.",
+                "developer": "\\> Desenvolvedor: {{dev}}.",
+                "donate": "Apoie",
+                "faq": "FAQ",
+                "cutecats": "Gatinhos Fofos",
+                "nopermission": "sem permissão"
+            }
+        },
+        "limit": {
+            "command": {
+                "name": "limite",
+                "description": "Define o limite de mensagens armazenadas.",
+                "options": [
+                    {
+                        "name": "limite",
+                        "description": "Limite de mensagens (recomendado: {{recommend}})"
+                    }
+                ]
+            },
+            "text": "Limite de textos armazenados definido para `{{limit}}`.\n\n**Dica:** limites baixos tem mais chance de gerar frases com sentido."
+        },
+        "ping": {
+            "command": {
+                "name": "latencia",
+                "description": "Exibe a latência do bot com o Discord."
+            },
+            "text": "🏓 **Latência**: {{ping}} ms."
+        },
+        "sendChance": {
+            "command": {
+                "name": "envio",
+                "description": "Chance de enviar uma mensagem no chat.",
+                "options": [
+                    {
+                        "name": "chance",
+                        "description": "Chance a ser definida."
+                    }
+                ]
+            },
+            "text": "Chance de envio definida para `{{chance}}%`."
+        },
+        "tracking": {
+            "command": {
+                "name": "rastreamento",
+                "description": "Define se o bot deve coletar suas mensagens ou não."
+            },
+            "texts": {
+                "enabled": "Não irei mais coletar suas mensagens. 😔",
+                "disabled": "Irei coletar suas mensagens novamente. 😊"
+            }
+        },
+        "unban": {
+            "command": {
+                "name": "desbanir",
+                "description": "Desbane o uso do bot em um servidor.",
+                "options": [
+                    {
+                        "name": "id",
+                        "description": "Id do servidor."
+                    }
+                ]
+            },
+            "texts": {
+                "success": "`{{guild}}` foi desbanido!"
+            }
+        },
+        "webhook": {
+            "command": {
+                "name": "webhook",
+                "description": "Configura um Webhook para enviar mensagens.",
+                "options": [
+                    {
+                        "description": "URL do Webhook."
+                    }
+                ]
+            },
+            "texts": {
+                "disabled": "Webhook desativado!",
+                "error": "Esse Webhook parece inválido 🤔 Verifique novamente se a URL está correta e se o Webhook existe.",
+                "guildError": "Esse Webhook não é dessa guilda 🤔",
+                "success": "Webhook `{{name}}` configurado! Divirta-se com as peripécias 🤭\n\nPara desconfigurar é só digitar o mesmo comando sem passar argumentos 👌"
+            }
+        }
+    },
+    "events": {
+        "welcome": "**Obrigado por me adicionar no servidor!**\n\nDigite `{{channelCommand}}` para configurar o canal, e logo após digite `{{enableCommand}}` para me habilitar 😁. Após a coleta de no mínimo {{min}} mensagens, começarei a gerar conteúdo 👀. Digite `{{infoCommand}}` para ter mais informações.\n\nA cada 30 dias de inatividade deletamos os textos armazenados. Caso queira deletar os textos, utilize `{{deleteCommand}}`. O parâmetro `{{member}}` pode ser utilizado pelo autor do comando ou quem tiver permissão de gerenciar mensagens.",
+        "faq": {
+            "title": "FAQ",
+            "description": "Dúvidas frequentes? Talvez isto te ajude. Dúvidas não listadas podem ser questionadas para o meu desenvolvedor: {{contact}}.",
+            "fields": [
+                {
+                    "name": "Como deleto mensagens armazenadas?",
+                    "value": "Você pode deletar mensagens armazenadas utilizando o comando `{{deleteCommand}}`. Passando o parâmetro `{{parameter}}`, é possível deletar as mensagens suas ou de algum membro."
+                },
+                {
+                    "name": "Como evito a coleta das minhas mensagens?",
+                    "value": "Para desabilitar a coleta de suas mensagens digite `{{trackingCommand}}`. Digita o mesmo comando para habilitar novamente."
+                },
+                {
+                    "name": "Esse bot utiliza alguma IA complexa?",
+                    "value": "Não. O bot utiliza [Cadeias de Markov](https://pt.wikipedia.org/wiki/Cadeias_de_Markov), um algoritmo bem simples que trabalha com probabilidades, utilizado na geração textos."
+                },
+                {
+                    "name": "Ele está gerando muitas frases sem sentido!",
+                    "value": "Atualmente, não há um filtro de classificação do que é uma frase com sentido ou não, então o bot vai tentar aleatoriamente gerar algo, que as vezes se relaciona com o contexto. É recomendado um limite menor de textos configurado, para que assim ele \"monte o quebra-cabeça\" de forma mais precisa."
+                },
+                {
+                    "name": "Como o bot foi feito?",
+                    "value": "O bot foi desenvolvido em [TypeScript](https://www.typescriptlang.org) (uma melhoria do JavaScript), usando [Discord.js](https://discord.js.org) no [Node.js](https://nodejs.org/en/about). Inicialmente o banco de dados era um arquivo [JSON](https://pt.wikipedia.org/wiki/JSON), mas logo passou a ser utilizado [MongoDB](https://pt.wikipedia.org/wiki/MongoDB). Atualmente hospedado na host de um [amigo]({{friendURL}}) na [DigitalOcean](https://digitalocean.com/)."
+                },
+                {
+                    "name": "Pretende escalonar o bot?",
+                    "value": "Estou incerto sobre isso. O bot surgiu mais como um estudo e hobby sugerido por amigos. Como sou apenas um jovem estudante, não tenho muita condição de manter o bot por muito tempo, mas estou fazendo o possível. Em breve estarei tornando o código do bot aberto no GitHub, permitindo que qualquer um rode sua própria instância, ou caso queira, continuar sua jornada."
+                }
+            ]
+        }
+    }
+}

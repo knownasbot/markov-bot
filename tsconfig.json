@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "removeComments": true,
+        "noImplicitAny": false,
+        "sourceMap": false,
+        "outDir": "dist",
+        "types": ["@types/node"],
+        "resolveJsonModule": true,
+        "skipLibCheck": true
+    },
+
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": ["node_modules"]
+}
