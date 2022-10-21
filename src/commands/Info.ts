@@ -134,6 +134,12 @@ export default class InfoCommand extends Command {
         const docsRow = new MessageActionRow()
             .addComponents(
                 new MessageButton({
+                    emoji: "<:github:1033081923125391442>",
+                    label: "GitHub",
+                    url: "https://github.com/knownasbot/markov-bot",
+                    style: "LINK"
+                }),
+                new MessageButton({
                     emoji: "📜",
                     label: this.t("vars.tos", lng),
                     url: "https://knwbot.gitbook.io/markov-bot/terms/terms-of-service",

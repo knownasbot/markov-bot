@@ -260,7 +260,7 @@
                 },
                 {
                     "name": "Do you have any plans to scale the bot?",
-                    "value": "I'm uncertain about this. The bot started as a study and hobby suggested by friends. As I'm still a young student, I can't afford to keep the bot for a long time, but I'm trying to do my best. Soon I'll make the entire bot's code open source in GitHub, allowing anyone to run their own instance, or if they want, continue his journey."
+                    "value": "I'm uncertain about this. The bot started as a study and hobby suggested by friends. As I'm still a young student, I can't afford to keep the bot for a long time, but I'm trying to do my best. The source code is on GitHub if you want to host your own instance."
                 }
             ]
         }

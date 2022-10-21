@@ -260,7 +260,7 @@
                 },
                 {
                     "name": "Pretende escalonar o bot?",
-                    "value": "Estou incerto sobre isso. O bot surgiu mais como um estudo e hobby sugerido por amigos. Como sou apenas um jovem estudante, não tenho muita condição de manter o bot por muito tempo, mas estou fazendo o possível. Em breve estarei tornando o código do bot aberto no GitHub, permitindo que qualquer um rode sua própria instância, ou caso queira, continuar sua jornada."
+                    "value": "Estou incerto sobre isso. O bot surgiu mais como um estudo e hobby sugerido por amigos. Como sou apenas um jovem estudante, não tenho muita condição de manter o bot por muito tempo, mas estou fazendo o possível. O código está hospedado no GitHub caso queira hospedar sua própria instância."
                 }
             ]
         }
