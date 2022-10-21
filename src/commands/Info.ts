@@ -94,14 +94,22 @@ export default class InfoCommand extends Command {
             serverInfo += this.t("commands.info.texts.sendingChance", { ...lng, chance: `${await database.getSendingPercentage() * 100}%` });
         }
 
-        embed.addField(this.t("commands.info.texts.serverField", lng), serverInfo);
-
         // Software
         let softwareInfo = this.t("commands.info.texts.nodeVersion", { ...lng, version: process.version }) + "\n";
         softwareInfo += this.t("commands.info.texts.djsVersion", { ...lng, version: "v" + version }) + "\n";
         softwareInfo += this.t("commands.info.texts.memUsage", { ...lng, mem: `${Math.floor(process.memoryUsage().heapUsed / 1024 ** 2)} mb` }) + "\n";
         softwareInfo += this.t("commands.info.texts.developer", { ...lng, dev: "<:twitter:960204380563460227> [@knownasbot](https://twitter.com/knownasbot)" });
-        embed.addField(this.t("commands.info.texts.softwareField", lng), softwareInfo);
+
+        embed.addFields(
+            {
+                name: this.t("commands.info.texts.serverField", lng),
+                value: serverInfo
+            },
+            {
+                name: this.t("commands.info.texts.softwareField", lng),
+                value: softwareInfo
+            }
+        );
 
         const cRow = new MessageActionRow()
             .addComponents(
