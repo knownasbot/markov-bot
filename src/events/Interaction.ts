@@ -12,7 +12,7 @@ interface FAQ {
         name: string;
         value: string;
     }[]
-}
+};
 
 export default class Interaction extends BaseEvent {
     private pleadingGIFs = [
@@ -32,12 +32,9 @@ export default class Interaction extends BaseEvent {
         const { t } = client.i18n;
 
         if (interaction.isCommand()) {
-            if (interaction.commandName != "ping" && !interaction.inGuild())
-                return (interaction as CommandInteraction).reply({ content: "https://i.imgur.com/5o142be.png" });
-
             const command: CommandInterface = client.commands.get(interaction.commandName);
             if (command) {
-                if (command.permission && !interaction.memberPermissions.has(command.permission)) {
+                if (command.permissions && !interaction.memberPermissions.has(command.permissions)) {
                     return interaction.reply({ content: t("commands.config.error", { lng: interaction.locale }), ephemeral: true });
                 }
 

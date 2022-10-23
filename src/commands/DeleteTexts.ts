@@ -1,24 +1,24 @@
 import { Message, MessageActionRow, MessageButton } from "discord.js";
 import Command from "../structures/Command";
 
-import { ButtonInteraction, CommandInteraction } from "discord.js/typings";
+import { ButtonInteraction, CommandInteraction, PermissionResolvable } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class DeleteTextsCommand extends Command {
+    public permissions: PermissionResolvable = "MANAGE_MESSAGES";
+
     constructor(client: ClientInterface) {
         super(
             client,
             "commands.deleteTexts.command.name",
             "commands.deleteTexts.command.description",
-            {
-                options: [
-                    {
-                        type: "USER",
-                        name: "commands.deleteTexts.command.options.0.name",
-                        description: "commands.deleteTexts.command.options.0.description"
-                    }
-                ]
-            }
+            [
+                {
+                    type: "USER",
+                    name: "commands.deleteTexts.command.options.0.name",
+                    description: "commands.deleteTexts.command.options.0.description"
+                }
+            ]
         );
     }
 

@@ -1,7 +1,5 @@
-import { ApplicationCommandOptionData } from "discord.js/typings";
-import BaseCommandInterface from "./BaseCommandInterface";
+import CommandInterface from "./CommandInterface";
 
-export default interface SubCommandInterface extends BaseCommandInterface {
+export default interface SubCommandInterface extends CommandInterface {
     type: "SUB_COMMAND";
-    options?: ApplicationCommandOptionData[];
 };

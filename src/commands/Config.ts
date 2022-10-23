@@ -7,22 +7,21 @@ import ChanceSubCommand from "./subcommands/config/Chance";
 import WebhookSubCommand from "./subcommands/config/Webhook";
 import LimitSubCommand from "./subcommands/config/Limit";
 
-import { CommandInteraction } from "discord.js/typings";
+import { CommandInteraction, PermissionResolvable } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 import SubCommandInterface from "../interfaces/SubCommandInterface";
 import SubCommandGroupInterface from "../interfaces/SubCommandGroupInterface";
 
 export default class ConfigCommand extends Command {
+    public permissions: PermissionResolvable = "MANAGE_GUILD";
+
     private subcommands: Record<string, SubCommandInterface | SubCommandGroupInterface>;
 
     constructor(client: ClientInterface) {
         super(
             client,
             "commands.config.command.name",
-            "commands.config.command.description",
-            {
-                permission: "MANAGE_GUILD"
-            }
+            "commands.config.command.description"
         );
 
         const subcommands = {
@@ -46,11 +45,7 @@ export default class ConfigCommand extends Command {
             });
         }
         
-        this.setOptions({
-            permission: this.permission,
-            options
-        });
-
+        this.options = options;
         this.subcommands = subcommands;
     }
 

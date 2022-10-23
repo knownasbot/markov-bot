@@ -1,7 +1,18 @@
-import { ApplicationCommandOptionData, PermissionResolvable } from "discord.js/typings";
-import BaseCommandInterface from "./BaseCommandInterface";
+import { CommandInteraction, ApplicationCommandOptionData, PermissionResolvable } from "discord.js/typings";
+import ClientInterface from "./ClientInterface";
 
-export default interface CommandInterface extends BaseCommandInterface {
+export default interface CommandInterface {
+    client: ClientInterface;
+    dev: boolean;
+    skipBan: boolean;
+    allowedDm: boolean;
+    permissions?: PermissionResolvable;
+
+    name: string;
+    description: string;
+    nameLocalizations: Record<string, string>;
+    descriptionLocalizations: Record<string, string>;
     options?: ApplicationCommandOptionData[];
-    permission?: PermissionResolvable;
+
+    run?(interaction: CommandInteraction): any;
 };

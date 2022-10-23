@@ -1,7 +1,5 @@
-import { ApplicationCommandSubGroup } from "discord.js/typings";
-import BaseCommandInterface from "./BaseCommandInterface";
+import CommandInterface from "./CommandInterface";
 
-export default interface SubCommandGroupInterface extends BaseCommandInterface {
+export default interface SubCommandGroupInterface extends CommandInterface {
     type: "SUB_COMMAND_GROUP";
-    options?: ApplicationCommandSubGroup[];
 };

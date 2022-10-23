@@ -9,17 +9,15 @@ export default class GenerateCommand extends Command {
             client,
             "commands.generate.command.name",
             "commands.generate.command.description",
-            {
-                options: [
-                    {
-                        type: "INTEGER",
-                        name: "commands.generate.command.options.0.name",
-                        description: "commands.generate.command.options.0.description",
-                        minValue: 1,
-                        maxValue: 1000
-                    }
-                ]
-            }
+            [
+                {
+                    type: "INTEGER",
+                    name: "commands.generate.command.options.0.name",
+                    description: "commands.generate.command.options.0.description",
+                    minValue: 1,
+                    maxValue: 1000
+                }
+            ]
         );
     }
 

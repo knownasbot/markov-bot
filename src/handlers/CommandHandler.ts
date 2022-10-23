@@ -18,7 +18,7 @@ export default class CommandHandler {
 
         commands.forEach(v => {
             const fileName: string = v.split(".")[0];
-            if (!v.includes(".") || fileName == "BaseCommand") return;
+            if (!v.includes(".")) return;
 
             try {
                 const Command = require("../commands/" + fileName).default;
@@ -27,11 +27,13 @@ export default class CommandHandler {
 
                 props = this.translateCommand(client.i18n, props);
 
-                const cmd = {
+                const cmd: ApplicationCommandData = {
                     name: props.name,
                     description: props.description,
                     nameLocalizations: props.nameLocalizations,
                     descriptionLocalizations: props.descriptionLocalizations,
+                    dmPermission: !!props.allowedDm,
+                    defaultMemberPermissions: props.permissions ?? null,
                     options: props.options
                 };
                 
@@ -43,7 +45,7 @@ export default class CommandHandler {
                     devCommandOptions.push(cmd);
                 }
             } catch(e) {
-                console.log("[Commands]", `Failed to load the command "${v}":\n`, e);
+                console.error("[Commands]", `Failed to load the command "${v}":\n`, e);
             }
         });
 
@@ -53,7 +55,7 @@ export default class CommandHandler {
         // Register temporary commands for testing
         for (let guildId of client.config.devGuilds) {
             client.guilds.fetch(guildId)
-            .then(async guild => {
+            .then(async () => {
                 try {
                     await client.application.commands.set(devCommandOptions, guildId);
                 } catch(e) {
@@ -72,7 +74,7 @@ export default class CommandHandler {
         props.name = /[a-z]\.[a-z]/.test(name) ? t(name) : name;
         props.description = /[a-z]\.[a-z]/.test(description) ? t(description, { recommend: 500 }) : description;
 
-        if (props.options?.length > 0) {
+        if (props.options) {
             for (let option of props.options) {
                 option = this.translateCommand(i18n, option);
             }

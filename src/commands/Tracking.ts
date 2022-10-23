@@ -5,6 +5,7 @@ import ClientInterface from "../interfaces/ClientInterface";
 
 export default class TrackingCommand extends Command {
     public skipBan: boolean = true;
+    public allowedDm: boolean = true;
 
     constructor(client: ClientInterface) {
         super(
