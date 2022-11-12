@@ -1,9 +1,9 @@
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 
 import { Message, Collection } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
-export default class MessageDeleteBulk extends BaseEvent {
+export default class MessageDeleteBulk extends Event {
     constructor() {
         super("messageDeleteBulk");
     }

@@ -1,9 +1,9 @@
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 
 import { Message } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
-export default class MessageUpdate extends BaseEvent {
+export default class MessageUpdate extends Event {
     constructor() {
         super("messageUpdate");
     }

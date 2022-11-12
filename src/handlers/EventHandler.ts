@@ -1,15 +1,8 @@
 import { readdirSync } from "fs";
 import * as path from "path";
+import Event from "../structures/Event";
 
 import ClientInterface from "../interfaces/ClientInterface";
-
-interface EventInterface {
-    (client?: ClientInterface): void,
-
-    identifier: string,
-
-    run(...args: any[]): any
-}
 
 export default class EventHandler {
     constructor(client: ClientInterface) {
@@ -17,10 +10,10 @@ export default class EventHandler {
 
         events.forEach(v => {
             const fileName: string = v.split(".")[0];
-            if (fileName == "BaseEvent" || v.endsWith(".json")) return;
+            if (v.endsWith(".json")) return;
 
-            const Event = require("../events/" + fileName).default;
-            const props: EventInterface = new Event(client);
+            const LoadedEvent = require("../events/" + fileName).default;
+            const props: Event = new LoadedEvent();
 
             client.on(props.identifier, props.run.bind(props, client));
         });

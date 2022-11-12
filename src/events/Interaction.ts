@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 
 import { CommandInteraction, ButtonInteraction } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
@@ -14,7 +14,7 @@ interface FAQ {
     }[]
 };
 
-export default class Interaction extends BaseEvent {
+export default class Interaction extends Event {
     private pleadingGIFs = [
         "https://c.tenor.com/F7ypx136ZigAAAAd/cat-cute.gif",
         "https://c.tenor.com/RGzSEnABvDoAAAAC/mad-angry.gif",

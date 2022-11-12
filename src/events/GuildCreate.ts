@@ -1,5 +1,5 @@
 import { MessageEmbed, MessageActionRow, MessageButton, WebhookClient } from "discord.js";
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 
 import { Guild } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
@@ -11,7 +11,7 @@ interface deleteCommandOptions {
     }[];
 };
 
-export default class GuildCreate extends BaseEvent {
+export default class GuildCreate extends Event {
     private webhook: WebhookClient;
 
     constructor() {

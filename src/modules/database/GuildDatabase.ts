@@ -234,7 +234,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
 
         try {
             if (idx != -1) {
-                info = JSON.parse(JSON.stringify(this.textsInfo[idx])); // Remove the memory reference
+                info = this.textsInfo[idx];
                 if (!info?.encrypted || !info?.decrypted) return;
 
                 this.textsInfo.splice(idx, 1);

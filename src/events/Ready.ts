@@ -1,4 +1,4 @@
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 import CommandHandler from "../handlers/CommandHandler";
 import TextsModel from "../modules/database/models/TextsModel";
 import * as status from "./status.json";
@@ -6,7 +6,7 @@ import * as status from "./status.json";
 import { ActivitiesOptions } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
-export default class Ready extends BaseEvent {
+export default class Ready extends Event {
     private randomTexts: (string | ActivitiesOptions)[] = status as (string | ActivitiesOptions)[];
 
     constructor() {

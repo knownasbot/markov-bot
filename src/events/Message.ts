@@ -1,12 +1,12 @@
 import { WebhookClient } from "discord.js";
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 import specialEventList from "../modules/specialEvents";
 
 import { Message } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 import SpecialEventInterface from "../interfaces/SpecialEventInterface";
 
-export default class MessageCreate extends BaseEvent {
+export default class MessageCreate extends Event {
     constructor() {
         super("messageCreate");
     }

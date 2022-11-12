@@ -1,10 +1,10 @@
 import { MessageEmbed, WebhookClient } from "discord.js";
-import BaseEvent from "./BaseEvent";
+import Event from "../structures/Event";
 
 import { Guild } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
-export default class GuildDelete extends BaseEvent {
+export default class GuildDelete extends Event {
     private webhook: WebhookClient;
 
     constructor() {
