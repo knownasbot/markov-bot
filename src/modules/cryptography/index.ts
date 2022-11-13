@@ -1,7 +1,8 @@
 import * as crypto from "crypto";
 
 interface DecryptedText {
-    author?: string;
+    id: string;
+    author: string;
     decrypted: string;
     encrypted: string;
 };
@@ -21,15 +22,16 @@ export default class Cryptography {
     /**
      * Encrypts the text.
      * @param text Text.
-     * @param author Author ID.
-     * @returns Encrypted text in `iv:text:author` format.
+     * @param author Author id.
+     * @param id Message id.
+     * @returns Encrypted text in `iv:text:author:id` format.
      */
-    encrypt(text: string, author: string): string {
+    encrypt(text: string, author: string, id: string): string {
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv(this.algorithm, this.password, iv);
         const encrypted = Buffer.concat([ cipher.update(text), cipher.final() ]);
 
-        return `${iv.toString("base64")}:${encrypted.toString("base64")}:${author}`;
+        return `${iv.toString("base64")}:${encrypted.toString("base64")}:${author}:${id}`;
     }
 
     /**
@@ -38,10 +40,12 @@ export default class Cryptography {
      * @returns The author and decrypted text.
      */
     async decrypt(text: string): Promise<DecryptedText> {
-        if (!/^[0-9a-z+/=]+:[0-9a-z+/=]+:\d+$/i.test(text)) {
+        if (!/^[0-9a-z+/=]+:[0-9a-z+/=]+:\d+(:\d+)?$/i.test(text)) {
             return {
+                id: null,
+                author: null,
                 decrypted: text,
-                encrypted: text
+                encrypted: null
             };
         }
 
@@ -49,6 +53,7 @@ export default class Cryptography {
             const values = text.split(":");
             const iv = Buffer.from(values[0], "base64");
             const encrypted = Buffer.from(values[1], "base64");
+            const id = values[3];
             const author = values[2];
             const decipher = crypto.createDecipheriv(this.algorithm, this.password, iv);
             
@@ -63,6 +68,7 @@ export default class Cryptography {
             decipher.write(encrypted);
             decipher.end(() => {
                 resolve({
+                    id,
                     author,
                     decrypted,
                     encrypted: text

@@ -21,6 +21,10 @@ import DatabaseManager from "./modules/database/DatabaseManager";
 import EventHandler from "./handlers/EventHandler";
 import ClientInterface from "./interfaces/ClientInterface";
 
+const sweeper = {
+    interval: 3600,
+    filter: () => () => true
+};
 const client: ClientInterface = new Client({
     allowedMentions: { parse: [] },
     failIfNotExists: false,
@@ -29,10 +33,8 @@ const client: ClientInterface = new Client({
         Intents.FLAGS.GUILD_MESSAGES,
     ],
     sweepers: {
-        users: {
-            interval: 3600,
-            filter: () => () => true
-        },
+        users: sweeper,
+        messages: sweeper,
         guildMembers: {
             interval: 3600,
             filter: () => (member) => member.user.id != client.user.id

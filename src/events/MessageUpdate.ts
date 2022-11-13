@@ -1,28 +1,32 @@
 import Event from "../structures/Event";
 
-import { Message } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
+interface Message {
+    id: string;
+    content: string;
+    channel_id: string;
+    guild_id: string;
+};
+
 export default class MessageUpdate extends Event {
+    public ws: boolean = true;
+
     constructor() {
-        super("messageUpdate");
+        super("MESSAGE_UPDATE");
     }
 
-    async run(client: ClientInterface, oldMessage: Message, message: Message): Promise<void> {
+    async run(client: ClientInterface, message: Message): Promise<void> {
         if (
-            message.author.bot ||
-            !message.content ||
-            message.content.trim().length < 1 ||
-            message.channel.type != "GUILD_TEXT" ||
-            await client.database.isBanned(message.guildId)
+            await client.database.isBanned(message.guild_id)
         ) return;
 
-        const database = await client.database.fetch(message.guildId);
+        const database = await client.database.fetch(message.guild_id);
         if (!database.toggledActivity) return;
 
         const channelId = await database.getChannel();
-        if (message.channelId != channelId) return;
+        if (message.channel_id != channelId) return;
 
-        database.updateText(message.author.id, oldMessage.content, message.content);
+        database.updateText(message.id, message.content);
     }
 }

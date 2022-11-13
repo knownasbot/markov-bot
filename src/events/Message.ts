@@ -41,7 +41,7 @@ export default class MessageCreate extends Event {
 
             if (Math.random() <= collectPercentage) {
                 client.database.isTrackAllowed(message.author.id)
-                    .then(async () => await database.addText(message.content, message.author.id))
+                    .then(async () => await database.addText(message.content, message.author.id, message.id))
                     .catch(() => {});
             }
 

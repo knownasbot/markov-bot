@@ -10,7 +10,8 @@ interface GuildDatabaseInterface {
 }
 
 interface DecryptedText {
-    author?: string;
+    id: string;
+    author: string;
     decrypted: string;
     encrypted: string;
 };
@@ -24,7 +25,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
     public channelId: string;
     public webhook: string;
     public textsLimit: number = 500;
-    public textsInfo: DecryptedText[] = [];
+    public texts: DecryptedText[] = [];
     public collectPercentage: number;
     public sendingPercentage: number;
 
@@ -32,7 +33,6 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
     private loadedConfig: boolean = false;
     private loadedTexts: boolean = false;
     private guildId: string;
-    private texts: string[] = [];
 
     constructor(client: ClientInterface, guildId: string) {
         super();
@@ -67,8 +67,9 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
      * Adds a text to the database.
      * @param text The text.
      * @param author Text author.
+     * @param id Message id.
      */
-    async addText(text: string, author: string): Promise<void> {
+    async addText(text: string, author: string, id: string): Promise<void> {
         this.lastActivity = Date.now();
 
         try {
@@ -76,20 +77,18 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
                 await this.loadTexts();
             }
 
-            const encryptedText = this.client.crypto.encrypt(text, author);
+            const encryptedText = this.client.crypto.encrypt(text, author, id);
 
             await TextsModel.updateOne({ guildId: this.guildId }, {
                 $push: { list: encryptedText },
                 expiresAt: this.expiresTimestamp()
             }, { upsert: true, new: true }).exec();
 
-            this.texts.push(text);
-            this.textsInfo.push({ author, decrypted: text, encrypted: encryptedText });
-
+            this.texts.push({ id, author, decrypted: text, encrypted: encryptedText });
             if (this.texts.length > this.textsLimit)
                 await this.deleteFirstText(this.texts.length - this.textsLimit);
 
-            this.markovChains.generateDictionary(this.texts);
+            this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
         } catch(e) {
             console.error("[Database]", `Failed to add a text to database of guild ${this.guildId}:\n`, e);
         }
@@ -225,21 +224,19 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
 
     /**
      * Deletes a specific stored text.
-     * @param author Text author.
-     * @param text Text.
+     * @param id Message id.
      */
-    async deleteText(author: string, text: string): Promise<void> {
-        const idx = this.textsInfo.findIndex((v) => v.author == author && v.decrypted == text);
+    async deleteText(id: string): Promise<void> {
+        const idx = this.texts.findIndex((v) => v.id == id);
         let info: DecryptedText;
 
         try {
             if (idx != -1) {
-                info = this.textsInfo[idx];
+                info = this.texts[idx];
                 if (!info?.encrypted || !info?.decrypted) return;
 
-                this.textsInfo.splice(idx, 1);
-                this.texts = this.textsInfo.map((v) => v.decrypted);
-                this.markovChains.generateDictionary(this.texts);
+                this.texts.splice(idx, 1);
+                this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
 
                 await TextsModel.updateOne({ guildId: this.guildId }, { $pull: { list: info.encrypted } }).exec();
             }
@@ -269,10 +266,9 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
 
             for (let i=0; i < range; i++) {
                 this.texts.shift();
-                this.textsInfo.shift();
             }
 
-            this.markovChains.generateDictionary(this.texts);
+            this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
         } catch(e) {
             console.error("[Database]", `Failed to delete the first texts (range: ${range}) of guild ${this.guildId}:\n`, e);
         }
@@ -307,7 +303,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
             await this.loadTexts();
         }
 
-        let userTexts = this.textsInfo.filter(v => v.author == user).map(v => v.decrypted);
+        let userTexts = this.texts.filter(v => v.author == user).map(v => v.decrypted);
         if (userTexts.length < 1) return;
 
         try {
@@ -326,14 +322,11 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
                 throw new Error("Modified count equals to 0");
 
             userTexts.forEach((v) => {
-                let i = this.texts.findIndex((_v) => v == _v);
-                let i2 = this.textsInfo.findIndex((_v) => v == _v.decrypted);
-
+                let i = this.texts.findIndex((_v) => v == _v.decrypted);
                 if (i >= 0) this.texts.splice(i, 1);
-                if (i2 >= 0) this.textsInfo.splice(i2, 1);
             });
 
-            this.markovChains.generateDictionary(this.texts);
+            this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
 
             return;
         } catch(e) {
@@ -345,19 +338,19 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
 
     /**
      * Edits a stored text.
-     * @param author Text author.
-     * @param text Text.
-     * @param update New text.
+     * @param id Message id.
+     * @param text New text.
      */
-    async updateText(author: string, text: string, update: string) {
-        const idx = this.textsInfo.findIndex((v) => v.author == author && v.decrypted == text);
+    async updateText(id: string, text: string) {
+        const idx = this.texts.findIndex((v) => v.id == id);
         let info: DecryptedText;
 
         try {
             if (idx != -1) {
-                const encryptedText = this.client.crypto.encrypt(update, author);
+                info = this.texts[idx];
+                if (!info) return;
 
-                info = this.textsInfo[idx];
+                const encryptedText = this.client.crypto.encrypt(text, info.author, id);
 
                 await TextsModel.updateOne(
                     { guildId: this.guildId },
@@ -365,10 +358,9 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
                     { arrayFilters: [ { element: info.encrypted } ] }
                 ).exec();
 
-                info.decrypted = update;
+                info.decrypted = text;
                 info.encrypted = encryptedText;
-                this.texts = this.textsInfo.map((v) => v.decrypted);
-                this.markovChains.generateDictionary(this.texts);
+                this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
             }
         } catch(e) {
             console.error("[Database]", `Failed to update the text "${info?.encrypted}" of guild ${this.guildId}:\n`, e);
@@ -390,7 +382,6 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
             this.channelId = null;
             this.webhook = null;
             this.textsLimit = 500;
-            this.textsInfo = [];
             this.texts = [];
         } catch(e) {
             console.error("[Database]", `Failed to delete the database of guild ${this.guildId}:\n`, e);
@@ -485,11 +476,10 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
             if (this.texts.length < 1) {
                 const texts = await this.getTexts();
                 texts.forEach(v => {
-                    this.texts.push(v.decrypted);
-                    this.textsInfo.push(v);
+                    this.texts.push(v);
                 });
 
-                this.markovChains.generateDictionary(this.texts);
+                this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
                 this.loadedTexts = true;
             }
         } catch(e) {
@@ -531,7 +521,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
 
             return [];
         } catch(e) {
-            console.error("[Database]", `Failed to get the texts of guild ${this.guildId}:\m`, e);
+            console.error("[Database]", `Failed to get the texts of guild ${this.guildId}:\n`, e);
         }
     }
 

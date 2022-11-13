@@ -1,28 +1,31 @@
 import Event from "../structures/Event";
 
-import { Message } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
+interface Message {
+    id: string;
+    channel_id: string;
+    guild_id: string;
+};
+
 export default class MessageDelete extends Event {
+    public ws: boolean = true;
+
     constructor() {
-        super("messageDelete");
+        super("MESSAGE_DELETE");
     }
 
     async run(client: ClientInterface, message: Message): Promise<void> {
         if (
-            message.author.bot ||
-            !message.content ||
-            message.content.trim().length < 1 ||
-            message.channel.type != "GUILD_TEXT" ||
-            await client.database.isBanned(message.guildId)
+            await client.database.isBanned(message.guild_id)
         ) return;
 
-        const database = await client.database.fetch(message.guildId);
+        const database = await client.database.fetch(message.guild_id);
         if (!database.toggledActivity) return;
 
         const channelId = await database.getChannel();
-        if (message.channelId != channelId) return;
+        if (message.channel_id != channelId) return;
 
-        database.deleteText(message.author.id, message.content);
+        database.deleteText(message.id);
     }
 }

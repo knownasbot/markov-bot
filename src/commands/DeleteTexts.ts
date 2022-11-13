@@ -53,7 +53,7 @@ export default class DeleteTextsCommand extends Command {
         try {
             let textsLength = await database.getTextsLength();
             if (member) {
-                textsLength = database.textsInfo.filter(v => v.author == member).length
+                textsLength = database.texts.filter(v => v.author == member).length
             }
             if (textsLength < 1) return interaction.reply(this.t("commands.deleteTexts.texts.notexts", lng));
 
