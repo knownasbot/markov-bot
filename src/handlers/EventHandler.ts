@@ -2,6 +2,7 @@ import { readdirSync } from "fs";
 import * as path from "path";
 import Event from "../structures/Event";
 
+import { WSEventType } from "discord.js";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class EventHandler {
@@ -15,7 +16,11 @@ export default class EventHandler {
             const LoadedEvent = require("../events/" + fileName).default;
             const props: Event = new LoadedEvent();
 
-            client.on(props.identifier, props.run.bind(props, client));
+            if (props.ws) {
+                client.ws.on(props.identifier as WSEventType, props.run.bind(props, client));
+            } else {
+                client.on(props.identifier, props.run.bind(props, client));
+            }
         });
     }
 }

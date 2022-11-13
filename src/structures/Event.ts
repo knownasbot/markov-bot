@@ -1,9 +1,11 @@
+import { WSEventType } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class Event {
-    public identifier: string;
+    public ws: boolean = false;
+    public identifier: string | WSEventType;
 
-    constructor(identifier: string) {
+    constructor(identifier: string | WSEventType) {
         this.identifier = identifier;
     }
 
