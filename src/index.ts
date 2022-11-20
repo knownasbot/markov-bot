@@ -46,7 +46,27 @@ const dbConnection = new DatabaseConnection(process.env.DB_URI);
 
 client.config = {
     admins: [ "283740954328825858" ],
-    devGuilds: []
+    devGuilds: [],
+    links: {
+        website: "https://knwbot.gitbook.io/markov-bot/",
+        tos: "https://knwbot.gitbook.io/markov-bot/terms/terms-of-service",
+        privacy: "https://knwbot.gitbook.io/markov-bot/terms/privacy-policy",
+        github: "https://github.com/knownasbot/markov-bot",
+        topgg: "https://top.gg/bot/903354338565570661",
+        bmc: "https://www.buymeacoffee.com/knownasbot"
+    },
+    emojis: {
+        twitter: "<:twitter:960204380563460227>",
+        github: "<:github:1033081923125391442>",
+        topgg: "<:topgg:1016432122124320818>",
+        bmc: "<:bmc:987493129772990464>",
+        bitcoin: "<:bitcoin:958802392642617364>",
+        ethereum: "<:ethereum:989195060857946174>"
+    },
+    cryptoAddresses: {
+        bitcoin: "bc1q69uu262ylvac5me8yj5ejjh9qjmuwtuepd2dfg",
+        ethereum: "0xCD27fADFf2eDBE6625518A56BceE4237cf78252b"
+    }
 };
 client.crypto = new Cryptography(process.env.CRYPTO_SECRET);
 client.cooldown = new Collection();

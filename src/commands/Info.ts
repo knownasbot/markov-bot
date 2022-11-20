@@ -98,7 +98,7 @@ export default class InfoCommand extends Command {
         let softwareInfo = this.t("commands.info.texts.nodeVersion", { ...lng, version: process.version }) + "\n";
         softwareInfo += this.t("commands.info.texts.djsVersion", { ...lng, version: "v" + version }) + "\n";
         softwareInfo += this.t("commands.info.texts.memUsage", { ...lng, mem: `${Math.floor(process.memoryUsage().heapUsed / 1024 ** 2)} mb` }) + "\n";
-        softwareInfo += this.t("commands.info.texts.developer", { ...lng, dev: "<:twitter:960204380563460227> [@knownasbot](https://twitter.com/knownasbot)" });
+        softwareInfo += this.t("commands.info.texts.developer", { ...lng, dev: `${this.client.config.emojis.twitter} [@knownasbot](https://twitter.com/knownasbot)` });
 
         embed.addFields(
             {
@@ -114,9 +114,9 @@ export default class InfoCommand extends Command {
         const cRow = new MessageActionRow()
             .addComponents(
                 new MessageButton({
-                    emoji: "<:topgg:1016432122124320818>",
+                    emoji: this.client.config.emojis.topgg,
                     label: "Top.gg",
-                    url: "https://top.gg/bot/903354338565570661",
+                    url: this.client.config.links.topgg,
                     style: "LINK"
                 }),
                 new MessageButton({
@@ -142,21 +142,21 @@ export default class InfoCommand extends Command {
         const docsRow = new MessageActionRow()
             .addComponents(
                 new MessageButton({
-                    emoji: "<:github:1033081923125391442>",
+                    emoji: this.client.config.emojis.github,
                     label: "GitHub",
-                    url: "https://github.com/knownasbot/markov-bot",
+                    url: this.client.config.links.github,
                     style: "LINK"
                 }),
                 new MessageButton({
                     emoji: "📜",
                     label: this.t("vars.tos", lng),
-                    url: "https://knwbot.gitbook.io/markov-bot/terms/terms-of-service",
+                    url: this.client.config.links.tos,
                     style: "LINK"
                 }),
                 new MessageButton({
                     emoji: "🔒",
                     label: this.t("vars.privacyPolicy", lng),
-                    url: "https://knwbot.gitbook.io/markov-bot/terms/privacy-policy",
+                    url: this.client.config.links.privacy,
                     style: "LINK"
                 })
             );

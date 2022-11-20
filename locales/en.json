@@ -103,7 +103,7 @@
         "donate": {
             "title": "Donate!",
             "cryptoTitle": "Don't use fiat currencies? No problem! XD",
-            "description": "Initially suggested by friends, I became bigger. With bigger applications, bigger is the requirement for maintenance.\n\nCurrently, I'm being hosted by my developer's friend, <:twitter:960204380563460227> [**@LukeFl_**](https://twitter.com/lukefl_) (thx!), but a day this dependence will need to go. That's why I need your support! *Since my developer is still a student xd*.\n\n{{urls}}",
+            "description": "Initially suggested by friends, I became bigger. With bigger applications, bigger is the requirement for maintenance.\n\nCurrently, I'm being hosted by my developer's friend, {{friendURL}} (thx!), but a day this dependence will need to go. That's why I need your support! *Since my developer is still a student xd*.\n\n{{urls}}",
             "footer": "If you don't have conditions, your appreciation is already very welcome!"
         },
         "enable": {

@@ -39,19 +39,19 @@ export default class GuildCreate extends Event {
                         new MessageButton({
                             emoji: "💡",
                             label: t("vars.gettingStarted", lng),
-                            url: "https://knwbot.gitbook.io/markov-bot/",
+                            url: client.config.links.website,
                             style: "LINK"
                         }),
                         new MessageButton({
                             emoji: "📜",
                             label: t("vars.tos", lng),
-                            url: "https://knwbot.gitbook.io/markov-bot/terms/terms-of-service",
+                            url: client.config.links.tos,
                             style: "LINK"
                         }),
                         new MessageButton({
                             emoji: "🔒",
                             label: t("vars.privacyPolicy", lng),
-                            url: "https://knwbot.gitbook.io/markov-bot/terms/privacy-policy",
+                            url: client.config.links.privacy,
                             style: "LINK"
                         })
                     );

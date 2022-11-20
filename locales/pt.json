@@ -103,7 +103,7 @@
         "donate": {
             "title": "Apoie!",
             "cryptoTitle": "Não usa moedas fiduciárias? Isso não é desculpa! XD",
-            "description": "Surgido inicialmente como uma sugestão de amigos, eu me tornei algo muito maior. Com maiores aplicações, maior a demanda por manuntenções.\n\nAtualmente, estou sendo hospedado pelo amigo do meu desenvolvedor, <:twitter:960204380563460227> [**@LukeFl_**](https://twitter.com/lukefl_) (obrigado!), mas um dia essa dependência precisará acabar. Por isso, contamos com seu apoio! *Já que meu desenvolvedor ainda é um estudante xd*.\n\n{{urls}}",
+            "description": "Surgido inicialmente como uma sugestão de amigos, eu me tornei algo muito maior. Com maiores aplicações, maior a demanda por manuntenções.\n\nAtualmente, estou sendo hospedado pelo amigo do meu desenvolvedor, {{friendURL}} (obrigado!), mas um dia essa dependência precisará acabar. Por isso, contamos com seu apoio! *Já que meu desenvolvedor ainda é um estudante xd*.\n\n{{urls}}",
             "footer": "Caso não tenha condições, sua apreciação já é muito bem vinda!"
         },
         "enable": {

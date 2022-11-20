@@ -65,11 +65,15 @@ export default class Interaction extends Event {
                 embed = new MessageEmbed({
                     color: 0x34eb71,
                     title: "💸 " + t("commands.donate.title", { ...lng }),
-                    description: t("commands.donate.description", { ...lng, urls: "**<:pix:956876023302070302> Pix: [livepix.gg/bot](https://livepix.gg/bot)**\n<:bmc:987493129772990464> **Buy Me A Coffee: [buymeacoffee.com/knownasbot](https://www.buymeacoffee.com/knownasbot)**" }),
+                    description: t("commands.donate.description", {
+                        ...lng,
+                        urls: `${client.config.emojis.bmc} **Buy Me A Coffee: [buymeacoffee.com/knownasbot](${client.config.links.bmc})**`,
+                        friendURL: `**${client.config.emojis.twitter} [@LukeFl_](https://twitter.com/lukefl_)**`
+                    }),
                     fields: [
                         {
                             name: t("commands.donate.cryptoTitle", { ...lng }),
-                            value: `**<:bitcoin:958802392642617364> Bitcoin:** \`bc1q69uu262ylvac5me8yj5ejjh9qjmuwtuepd2dfg\`\n**<:litecoin:989192252469415936> Litecoin:** \`ltc1qwzlu2rl44ncd6g5nwa5rj3jecwav8f82340t6s\`\n**<:ethereum:989195060857946174> Ethereum:** \`0x3419DC6E054b42Ccbf3Bb3dFd22079fa12016505\``
+                            value: `**${client.config.emojis.bitcoin} Bitcoin:** \`${client.config.cryptoAddresses.bitcoin}\`\n**${client.config.emojis.ethereum} Ethereum:** \`${client.config.cryptoAddresses.ethereum}\``
                         }
                     ],
                     image: {
@@ -84,7 +88,7 @@ export default class Interaction extends Event {
                     ...lng,
                     returnObjects: true,
 
-                    contact: "**<:twitter:960204380563460227> [@knownasbot](https://twitter.com/knownasbot)**",
+                    contact: `**${client.config.emojis.twitter} [@knownasbot](https://twitter.com/knownasbot)**`,
                     friendURL: "https://twitter.com/lukefl_",
                     deleteCommand: "/" + t("commands.deleteTexts.command.name", lng),
                     trackingCommand: "/" + t("commands.tracking.command.name", lng),
