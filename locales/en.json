@@ -236,7 +236,7 @@
         "welcome": "**Thanks for adding me to the server!**\n\nType `{{channelCommand}}` to set up a channel and then `{{enableCommand}}` to enable me 😁. After collecting {{min}} messages, I'll start generating content 👀. Type `{{infoCommand}}` for more information.\n\nFor every 30 days of inactivity we delete the stored texts. If you want to delete the texts, use the command `{{deleteCommand}}`. The parameter `{{member}}` can be used by the command user or whoever has the message management permission.",
         "faq": {
             "title": "FAQ",
-            "description": "Questions? Maybe this can help you. Unlisted questions can be asked to my developer: {{contact}}.",
+            "description": "Questions? Maybe this can help you. Unlisted questions can be asked in my server.",
             "fields": [
                 {
                     "name": "How do I delete stored messages?",
@@ -245,6 +245,10 @@
                 {
                     "name": "I don't want it to collect my messages!",
                     "value": "To disable the collection of your messages, type `{{trackingCommand}}`. Type the same command to enable it again."
+                },
+                {
+                    "name": "Are the messages updated?",
+                    "value": "Yes. When any message is edited or deleted, if the bot is online and enabled, it will update the stored data."
                 },
                 {
                     "name": "Does this bot use any complex AI?",
