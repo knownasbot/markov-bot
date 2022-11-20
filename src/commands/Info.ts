@@ -142,6 +142,12 @@ export default class InfoCommand extends Command {
         const docsRow = new MessageActionRow()
             .addComponents(
                 new MessageButton({
+                    emoji: "👥",
+                    label: this.t("vars.support", lng),
+                    url: this.client.config.links.support,
+                    style: "LINK"
+                }),
+                new MessageButton({
                     emoji: this.client.config.emojis.github,
                     label: "GitHub",
                     url: this.client.config.links.github,

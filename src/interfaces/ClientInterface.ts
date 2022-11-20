@@ -15,6 +15,7 @@ export default interface ClientInterface extends Client {
             github: string;
             topgg: string;
             bmc: string;
+            support: string;
         };
         emojis: {
             twitter: string;

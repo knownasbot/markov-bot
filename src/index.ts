@@ -53,7 +53,8 @@ client.config = {
         privacy: "https://knwbot.gitbook.io/markov-bot/terms/privacy-policy",
         github: "https://github.com/knownasbot/markov-bot",
         topgg: "https://top.gg/bot/903354338565570661",
-        bmc: "https://www.buymeacoffee.com/knownasbot"
+        bmc: "https://www.buymeacoffee.com/knownasbot",
+        support: "https://discord.gg/YEZmW7Suc3"
     },
     emojis: {
         twitter: "<:twitter:960204380563460227>",
