@@ -120,7 +120,7 @@
                 "description": "Gera uma mensagem.",
                 "options": [
                     {
-                        "name": "quantidade",
+                        "name": "limite",
                         "description": "Quantidade máxima de palavras no texto."
                     }
                 ]
