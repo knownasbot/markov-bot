@@ -18,6 +18,7 @@ export default class MessageUpdate extends Event {
 
     async run(client: ClientInterface, message: Message): Promise<void> {
         if (
+            !message.content ||
             await client.database.isBanned(message.guild_id)
         ) return;
 
