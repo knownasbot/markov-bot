@@ -46,8 +46,8 @@ export default class MessageCreate extends Event {
             }
 
             if (textsLength < 5) return;
-            if (hasMention && guildCooldown + 5000 < Date.now()) {
-                sendPercentage = 0.25;
+            if (hasMention && guildCooldown + 1000 < Date.now()) {
+                sendPercentage = await database.getReplyPercentage();
                 guildCooldown = 0;
             }
 

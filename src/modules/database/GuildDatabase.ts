@@ -28,6 +28,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
     public texts: DecryptedText[] = [];
     public collectPercentage: number;
     public sendingPercentage: number;
+    public replyPercentage: number;
 
     private client: ClientInterface;
     private loadedConfig: boolean = false;
@@ -417,6 +418,20 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
             throw e;
         }
     }
+    /**
+     * Defines the chance to reply messages.
+     * @param percentage Float percentage (`p / 100`).
+     */
+    async setReplyPercentage(percentage: number): Promise<void> {
+        try {
+            await ConfigModel.findOneAndUpdate({ guildId: this.guildId }, { replyPercentage: percentage }, { upsert: true, new: true }).exec();
+            this.replyPercentage = percentage;
+        } catch(e) {
+            console.error("[Database]", `Failed to set the reply percentage of guild ${this.guildId}:\n`, e);
+
+            throw e;
+        }
+    }
 
     /**
      * Gets the chance to collect messages.
@@ -465,6 +480,31 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
             console.error("[Database]", `Failed to get the sending percentage of guild ${this.guildId}:\n`, e);
 
             return 0.10;
+        }
+    }
+
+    /**
+     * Gets the chance to reply messages.
+     * @returns Float percentage (`p / 100`);
+     */
+    async getReplyPercentage(): Promise<number> {
+        try {
+            if (!this.replyPercentage) {
+                let percentage = 0.25;
+                let query = await ConfigModel.findOne({ guildId: this.guildId }, "replyPercentage").exec();
+                if (query?.replyPercentage) {
+                    percentage = query.replyPercentage;
+                    this.replyPercentage = query.replyPercentage;
+                }
+
+                return percentage;
+            } else {
+                return this.replyPercentage;
+            }
+        } catch(e) {
+            console.error("[Database]", `Failed to get the reply percentage of guild ${this.guildId}:\n`, e);
+
+            return 0.25;
         }
     }
 

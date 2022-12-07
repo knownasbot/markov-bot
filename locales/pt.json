@@ -147,6 +147,7 @@
                 "textsLimit": "\\> Limite de textos: `{{limit}}`.",
                 "collectChance": "\\> Chance de coleta: `{{chance}}`.",
                 "sendingChance": "\\> Chance de envio: `{{chance}}`.",
+                "replyChance": "\\> Chance de resposta: `{{chance}}`.",
                 "nodeVersion": "\\> Versão do Node.js: `{{version}}`.",
                 "djsVersion": "\\> Versão do Discord.js: `{{version}}`.",
                 "memUsage": "\\> Uso de memória: `{{mem}}`.",
@@ -176,6 +177,19 @@
                 "description": "Exibe a latência do bot com o Discord."
             },
             "text": "🏓 **Latência**: {{ping}} ms."
+        },
+        "replyChance": {
+            "command": {
+                "name": "resposta",
+                "description": "Chance de responder uma mensagem do chat quando mencionado.",
+                "options": [
+                    {
+                        "name": "chance",
+                        "description": "Chance a ser definida."
+                    }
+                ]
+            },
+            "text": "Chance de resposta definida para `{{chance}}%`."
         },
         "sendChance": {
             "command": {

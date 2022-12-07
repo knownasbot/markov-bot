@@ -9,6 +9,7 @@ interface ConfigModel {
 
     collectPercentage: number;
     sendingPercentage: number;
+    replyPercentage: number;
 };
 
 const schema = new Schema<ConfigModel>({
@@ -19,7 +20,8 @@ const schema = new Schema<ConfigModel>({
     textsLimit: { type: Number, default: 500 },
 
     collectPercentage: { type: Number, default: 0.35 },
-    sendingPercentage: { type: Number, default: 0.10 }
+    sendingPercentage: { type: Number, default: 0.10 },
+    replyPercentage: { type: Number, default: 0.25 }
 });
 
 export default model("configs", schema);

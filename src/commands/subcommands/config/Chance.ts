@@ -6,6 +6,7 @@ import { CommandInteraction } from "discord.js/typings";
 
 import CollectSubCommand from "./chance/Collect";
 import SendingSubCommand from "./chance/Sending";
+import ReplySubCommand from "./chance/Reply";
 
 export default class ChanceSubCommandGroup extends SubCommandGroup {
     private subcommands: Record<string, SubCommandInterface>;
@@ -19,7 +20,8 @@ export default class ChanceSubCommandGroup extends SubCommandGroup {
 
         const subcommands = {
             collect: new CollectSubCommand(client),
-            send: new SendingSubCommand(client)
+            send: new SendingSubCommand(client),
+            reply: new ReplySubCommand(client)
         };
 
         let options = [];
