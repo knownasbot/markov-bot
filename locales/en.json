@@ -178,6 +178,23 @@
             },
             "text": "🏓 **Ping**: {{ping}} ms."
         },
+        "populate": {
+            "command": {
+                "name": "populate",
+                "description": "Populates the database with random texts.",
+                "options": [
+                    {
+                        "name": "amount",
+                        "description": "Number of texts to add."
+                    },
+                    {
+                        "name": "member",
+                        "description": "Sets the author of the generated texts."
+                    }
+                ]
+            },
+            "text": "Added `{{amount}}` texts to database."
+        },
         "replyChance": {
             "command": {
                 "name": "reply",

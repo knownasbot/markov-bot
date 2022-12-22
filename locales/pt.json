@@ -178,6 +178,23 @@
             },
             "text": "🏓 **Latência**: {{ping}} ms."
         },
+        "populate": {
+            "command": {
+                "name": "popular",
+                "description": "Popula o banco de dados com textos aleatórios.",
+                "options": [
+                    {
+                        "name": "quantia",
+                        "description": "Quantidade de textos."
+                    },
+                    {
+                        "name": "membro",
+                        "description": "Define o autor dos textos gerados."
+                    }
+                ]
+            },
+            "text": "`{{amount}}` textos adicionados ao banco de dados."
+        },
         "replyChance": {
             "command": {
                 "name": "resposta",
