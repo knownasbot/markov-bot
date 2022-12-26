@@ -1,8 +1,15 @@
-import { Message, MessageActionRow, MessageButton } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageSelectMenu, SnowflakeUtil } from "discord.js";
 import Command from "../structures/Command";
 
-import { ButtonInteraction, CommandInteraction } from "discord.js/typings";
+import { CommandInteraction, MessageSelectMenuOptions, MessageSelectOption } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
+
+interface DecryptedText {
+    id: string;
+    author: string;
+    decrypted: string;
+    encrypted: string;
+};
 
 export default class DeleteTextsCommand extends Command {
     constructor(client: ClientInterface) {
@@ -21,74 +28,303 @@ export default class DeleteTextsCommand extends Command {
     }
 
     async run(interaction: CommandInteraction) {
+        let currentPage = 0;
+        const itemsPerPage = 25;
+
         const lng = { lng: interaction.locale };
         const database = await this.client.database.fetch(interaction.guildId);
+        const dbTexts = await database.getTexts();
 
-        let member = interaction.options.get(this.options[0].name)?.value.toString();
-
-        let deletePermission: boolean = false;
+        let member = interaction.options.getUser(this.options[0].name)?.id;
+        let deletePermission = false;
         if (member == interaction.user.id) {
             deletePermission = true;
         } else if (typeof interaction.member.permissions != "string") {
             deletePermission = interaction.member.permissions.has("MANAGE_MESSAGES");
         }
 
-        if (!deletePermission) {
-            return interaction.reply(this.t("commands.deleteTexts.texts.nopermission", lng));
-        }
-
-        const confirmationRow = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                .setCustomId("confirm")
-                .setLabel(this.t("commands.deleteTexts.texts.confirmButton", lng))
-                .setStyle("SUCCESS"),
-                
-                new MessageButton()
-                .setCustomId("cancel")
-                .setLabel(this.t("commands.deleteTexts.texts.cancelButton", lng))
-                .setStyle("DANGER")
-            );
-        
-        try {
-            let textsLength = await database.getTextsLength();
-            if (member) {
-                textsLength = database.texts.filter(v => v.author == member).length
-            }
-            if (textsLength < 1) return interaction.reply(this.t("commands.deleteTexts.texts.notexts", lng));
-
-            const confirmationMessage: Message | any = await interaction.reply({
-                content: this.t("commands.deleteTexts.texts.confirmation", { ...lng, textsLength }),
-                components: [ confirmationRow ],
-                fetchReply: true
+        let texts = member ? dbTexts.filter((v) => member ? v.author == member : true) : dbTexts;
+        if (texts.length < 1) {
+            return interaction.reply({
+                content: this.t("commands.deleteTexts.texts.noTexts", lng),
+                ephemeral: true
             });
-            if (!confirmationMessage) return;
+        }
 
-            if (confirmationMessage instanceof Message) {
-                const filter = (i: ButtonInteraction) => i.isButton() && (i.customId == "confirm" || i.customId == "cancel") && i.user.id == interaction.user.id;
-                const collector = confirmationMessage.createMessageComponentCollector({ filter, time: 30000 });
-                collector.on("collect", async (i: ButtonInteraction) => {
-                    if (i.customId == "confirm") {
-                        (member ? database.deleteUserTexts(member) : database.deleteAllTexts())
-                            .then(() => i.update({
-                                content: this.t("commands.deleteTexts.texts.success", { ...lng, textsLength }),
-                                components: []
-                            }))
-                            .catch(() => i.update({ content: this.t("vars.error", lng), components: [] }));
+        let components = this.getPageComponents(interaction.user.id, texts, !!member, currentPage, itemsPerPage, interaction.locale);
 
-                        return collector.stop();
+        const replyMessage = await interaction.reply({ fetchReply: true, components }) as Message;
+        const collector = replyMessage.createMessageComponentCollector({
+            idle: 120000,
+            filter: (i) => i.user.id == interaction.user.id
+        });
+
+        collector.on("collect", async (i) => {
+            if (i.isButton()) {
+                if (i.customId == "deleteall") {
+                    if (!deletePermission) {
+                        await i.reply({
+                            content: this.t("commands.deleteTexts.texts.noPermission", lng),
+                            ephemeral: true
+                        });
+                        return;
                     }
 
-                    return collector.stop("cancel");
+                    const confirmRow = new MessageActionRow()
+                        .addComponents(
+                            new MessageButton({
+                                customId: "confirm",
+                                label: this.t("commands.deleteTexts.texts.confirmButton", lng),
+                                style: "SUCCESS"
+                            })
+                        );
+
+                    const confirmMessage = await i.reply({
+                        content: this.t("commands.deleteTexts.texts.confirmation", { ...lng, textsLength: texts.length }),
+                        ephemeral: true,
+                        fetchReply: true,
+                        components: [ confirmRow ]
+                    }) as Message;
+
+                    confirmMessage.createMessageComponentCollector({ idle: 60000 })
+                        .on("collect", async (confirmInteraction) => {      
+                            try {
+                                if (!member) await database.deleteAllTexts();
+                                else         await database.deleteUserTexts(member);
+
+                                await confirmInteraction.update({
+                                    content: this.t("commands.deleteTexts.texts.successAll", { ...lng, textsLength: texts.length }),
+                                    components: []
+                                });
+
+                                texts = [];
+                                currentPage = 0;
+
+                                components = this.getPageComponents(interaction.user.id, texts, !!member, currentPage, itemsPerPage, interaction.locale);
+                                await replyMessage.edit({ components });
+                            } catch(e) {
+                                await confirmInteraction.update({
+                                    content: this.t("vars.error", lng)
+                                });
+                            }
+                        })
+                } else if (i.customId == "mytexts") {
+                    member = interaction.user.id;
+                    texts = texts.filter((v) => v.author == member);
+                    if (texts.length < 1) {
+                        await i.reply({
+                            content: this.t("commands.deleteTexts.texts.noTexts", lng),
+                            ephemeral: true
+                        });
+                        return;
+                    }
+
+                    currentPage = 0;
+                    deletePermission = true;
+
+                    components = this.getPageComponents(interaction.user.id, texts, true, currentPage, itemsPerPage, interaction.locale);
+                    await i.update({ components });
+                } else if (/first|last|previous|next/.test(i.customId)) {
+                    if (i.customId == "first")         currentPage = 0;
+                    else if (i.customId == "last")     currentPage = Math.ceil(texts.length / itemsPerPage) - 1;
+                    else if (i.customId == "next")     currentPage++;
+                    else if (i.customId == "previous") currentPage--;
+
+                    components = this.getPageComponents(interaction.user.id, texts, !!member, currentPage, itemsPerPage, interaction.locale);
+                    await i.update({ components });
+                }
+            } else if (i.isSelectMenu()) {
+                const id = i.values[0];
+                const text = texts.find((v) => v.id == id);
+                if (!text) {
+                    return i.reply({
+                        content: this.t("commands.deleteTexts.texts.notFound", lng),
+                        ephemeral: true
+                    });
+                }
+
+                const infoRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageButton({
+                            customId: "infou",
+                            label: text.author,
+                            style: "SECONDARY",
+                            emoji: "👤",
+                            disabled: true
+                        }),
+                        new MessageButton({
+                            customId: "infot",
+                            label: new Date(SnowflakeUtil.timestampFrom(text.id)).toLocaleString(i.locale),
+                            style: "SECONDARY",
+                            emoji: "📆",
+                            disabled: true
+                        }),
+                        new MessageButton({
+                            label: this.t("commands.deleteTexts.texts.messageButton", lng),
+                            style: "LINK",
+                            emoji: "💬",
+                            url: `https://discord.com/channels/${i.guildId}/${await database.getChannel()}/${id}`
+                        }),
+                    );
+
+                const buttonsRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageButton({
+                            customId: `delete-${id}`,
+                            label: this.t("commands.deleteTexts.texts.deleteButton", lng),
+                            style: "DANGER",
+                            disabled: text.author != i.user.id && !deletePermission
+                        })
+                    );
+
+                const m = await i.reply({
+                    content: text.decrypted,
+                    ephemeral: true,
+                    fetchReply: true,
+                    components: [ infoRow, buttonsRow ]
+                }) as Message;
+
+                const collector = m.createMessageComponentCollector({
+                    max: 1,
+                    idle: 120000
                 });
-                collector.on("end", (_, reason: string) => {
-                    if (reason == "cancel" || reason == "time") {
-                        confirmationMessage.edit({ content: this.t("commands.deleteTexts.texts.cancel", lng), components: []});
+
+                collector.on("collect", async (b) => {
+                    const id = b.customId.split("-")[1];
+
+                    try {
+                        await database.deleteText(id);
+                        await b.update({
+                            content: this.t("commands.deleteTexts.texts.success", { ...lng, id }),
+                            components: []
+                        });
+
+                        const idx = texts.findIndex((v) => v.id == id);
+                        if (idx != -1) texts.splice(idx, 1);
+                        
+                        components = this.getPageComponents(interaction.user.id, texts, !!member, currentPage, itemsPerPage, interaction.locale);
+
+                        await replyMessage.edit({ components });
+                    } catch {
+                        await b.reply({
+                            content: this.t("vars.error", lng),
+                            ephemeral: true
+                        });
                     }
                 });
             }
-        } catch(e) {
-            return interaction.reply(this.t("vars.error", lng));
+        });
+
+        collector.on("end", async (_, reason) => {
+            if (reason == "idle") {
+                const rows = replyMessage.components;
+                for (let row of rows) {
+                    for (let component of row.components) {
+                        component.disabled = true;
+                    }
+                }
+
+                await replyMessage.edit({
+                    content: this.t("commands.deleteTexts.texts.expired", lng),
+                    components: rows
+                });
+            }
+        });
+    }
+
+    private getPageComponents(author: string, texts: DecryptedText[], hasMember: boolean, page: number, itemsPerPage: number, locale: string): MessageActionRow[] {
+        texts.sort((a, b) => SnowflakeUtil.timestampFrom(a.id) - SnowflakeUtil.timestampFrom(b.id));
+
+        const items = texts.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
+        const options: MessageSelectOption[] = [];
+
+        items.forEach((v) => {
+            const addedAt = new Date(SnowflakeUtil.timestampFrom(v.id));
+
+            options.push({
+                label: v.decrypted.slice(0, 100),
+                description: this.t("commands.deleteTexts.texts.textInfo", { lng: locale, author: v.author ?? "???", date: addedAt.toLocaleString(locale) }),
+                value: v.id,
+                default: false,
+                emoji: null
+            });
+        });
+
+        const menu = new MessageSelectMenu({
+            customId: "menu",
+            options
+        } as MessageSelectMenuOptions);
+
+        if (texts.length < 1) {
+            menu.setDisabled(true);
+            menu.setOptions([
+               {
+                   label: "Random text just to API don't tell it's an error.",
+                   value: "0"
+               }
+            ]);
         }
+
+        const menuRow = new MessageActionRow()
+            .addComponents(menu);
+
+        let pages = Math.ceil(texts.length / itemsPerPage);
+        pages     = pages < 1 ? 1 : pages;
+        const buttonsRow = new MessageActionRow()
+            .addComponents(
+                new MessageButton({
+                    customId: "first",
+                    label: "<<",
+                    style: "PRIMARY",
+                    disabled: page + 1 <= 1
+                }),
+                new MessageButton({
+                    customId: "previous",
+                    label: "<",
+                    style: "PRIMARY",
+                    disabled: page + 1 <= 1
+                }),
+                new MessageButton({
+                    customId: "pages",
+                    label: `${page + 1}/${pages}`,
+                    style: "SECONDARY",
+                    disabled: true
+                }),
+                new MessageButton({
+                    customId: "next",
+                    label: ">",
+                    style: "PRIMARY",
+                    disabled: page + 1 == pages
+                }),
+                new MessageButton({
+                    customId: "last",
+                    label: ">>",
+                    style: "PRIMARY",
+                    disabled: page + 1 == pages
+                })
+            );
+
+        const deleteRow = new MessageActionRow()
+            .addComponents(
+                new MessageButton({
+                    customId: "deleteall",
+                    label: this.t("commands.deleteTexts.texts.deleteAllButton", { lng: locale }),
+                    style: "DANGER",
+                    disabled: texts.length < 1
+                })
+            );
+
+        if (!hasMember) {
+            deleteRow.addComponents(
+                new MessageButton({
+                    customId: "mytexts",
+                    label: this.t("commands.deleteTexts.texts.myMessages", { lng: locale }),
+                    style: "PRIMARY",
+                    disabled: texts.filter((v) => v.author == author).length < 1
+                })
+            );
+        }
+
+        return [ menuRow, buttonsRow, deleteRow ];
     }
 }

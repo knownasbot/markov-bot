@@ -87,10 +87,18 @@
             "texts": {
                 "confirmButton": "Confirm",
                 "cancelButton": "Cancel",
+                "deleteButton": "Delete",
+                "deleteAllButton": "Delete All",
+                "messageButton": "Message",
+                "myMessages": "My Messages",
                 "confirmation": "Are you sure that you want to delete `{{textsLength}}` stored messages?",
-                "notexts": "There's no texts stored.",
-                "nopermission": "You are not allowed to delete messages.\n\nIf you want to delete your stored messages, please provide the parameter **` member `**.",
-                "success": "`{{textsLength}}` stored messages were deleted successfully.",
+                "noTexts": "There's no texts stored.",
+                "noPermission": "You are not allowed to delete messages.\n\nIf you want to delete your stored messages, click the **My Messages** button.",
+                "notFound": "Message not found. Maybe it's already deleted 🤔",
+                "success": "Successfully deleted the message of id `{{id}}`.",
+                "successAll": "`{{textsLength}}` stored messages were deleted successfully.",
+                "expired": "Type the command again to manage the stored messages.",
+                "textInfo": "Author: {{author}} - Added at: {{date}}",
                 "cancel": "Operation canceled."
             }
         },

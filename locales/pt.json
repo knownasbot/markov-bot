@@ -87,10 +87,18 @@
             "texts": {
                 "confirmButton": "Confirmar",
                 "cancelButton": "Cancelar",
+                "deleteButton": "Deletar",
+                "deleteAllButton": "Deletar Tudo",
+                "messageButton": "Mensagem",
+                "myMessages": "Minhas Mensagens",
                 "confirmation": "Tem certeza que deseja apagar `{{textsLength}}` mensagens do banco de dados?",
-                "notexts": "Não há textos para deletar.",
-                "nopermission": "Você não possui permissão para apagar as mensagens.\n\nCaso queira deletar suas mensagens armazenadas, forneça o parâmetro **` membro `**.",
-                "success": "Foram deletadas `{{textsLength}}` mensagens do banco de dados.",
+                "noTexts": "Não há textos para deletar.",
+                "noPermission": "Você não possui permissão para apagar as mensagens.\n\nCaso queira deletar suas mensagens armazenadas, clique em **Minhas Mensagens**.",
+                "notFound": "Mensagem não encontrada, Talvez já esteja deletada 🤔",
+                "success": "Mensagem de id `{{id}}` deletada com sucesso.",
+                "successAll": "Foram deletadas `{{textsLength}}` mensagens do banco de dados.",
+                "expired": "Digite o comando novamente para gerenciar as mensagens armazenadas.",
+                "textInfo": "Autor: {{author}} - Adicionado: {{date}}",
                 "cancel": "Operação cancelada."
             }
         },
