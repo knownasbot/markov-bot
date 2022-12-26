@@ -74,9 +74,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
         this.lastActivity = Date.now();
 
         try {
-            if (!this.loadedTexts) {
-                await this.loadTexts();
-            }
+            await this.getTexts();
 
             const encryptedText = this.client.crypto.encrypt(text, author, id);
 
@@ -216,9 +214,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
      * @returns Amount.
      */
     async getTextsLength(): Promise<number> {
-        if (!this.loadedTexts) {
-            await this.loadTexts();
-        }
+        await this.getTexts();
 
         return this.texts.length;
     }
@@ -254,9 +250,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
         this.lastActivity = Date.now();
 
         try {
-            if (!this.loadedTexts) {
-                await this.loadTexts();
-            }
+            await this.getTexts();
 
             let update: object = { $pop: { list: -1 } };
             if (range > 1) {
@@ -300,9 +294,7 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
      * @param user User id.
      */
     async deleteUserTexts(user: string): Promise<void> {
-        if (!this.loadedTexts) {
-            await this.loadTexts();
-        }
+        await this.getTexts();
 
         let userTexts = this.texts.filter(v => v.author == user).map(v => v.decrypted);
         if (userTexts.length < 1) return;
@@ -510,20 +502,29 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
 
     /**
      * Loads the texts from the database.
+     * @returns The decrypted texts.
      */
-    async loadTexts(): Promise<void> {
-        try {
-            if (this.texts.length < 1) {
-                const texts = await this.getTexts();
-                texts.forEach(v => {
-                    this.texts.push(v);
-                });
+    async getTexts(): Promise<DecryptedText[]> {
+        this.lastActivity = Date.now();
 
-                this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
-                this.loadedTexts = true;
+        if (!this.loadedTexts) {
+            try {
+                let query = await TextsModel.findOne({ guildId: this.guildId }).exec();
+
+                if (query?.list) {
+                    this.texts = await Promise.all(query.list.map(v => this.client.crypto.decrypt(v)));
+                    this.markovChains.generateDictionary(this.texts.map((v) => v.decrypted));
+                    this.loadedTexts = true;
+
+                    return this.texts;
+                }
+
+                return [];
+            } catch(e) {
+                console.error("[Database]", `Failed to get the texts of guild ${this.guildId}:\n`, e);
             }
-        } catch(e) {
-            console.error("[Database]", `Failed to load the texts of guild ${this.guildId}:\n`, e);
+        } else {
+            return this.texts;
         }
     }
 
@@ -542,26 +543,6 @@ export default class GuildDatabase extends EventEmitter implements GuildDatabase
         } catch(e) {
             // Try again
             this.init();
-        }
-    }
-
-    /**
-     * Gets the texts from the database and decrypts it.
-     * @returns Decrypted texts.
-     */
-    private async getTexts(): Promise<DecryptedText[]> {
-        this.lastActivity = Date.now();
-
-        try {
-            let query = await TextsModel.findOne({ guildId: this.guildId }).exec();
-
-            if (query?.list) {
-                return await Promise.all(query.list.map(v => this.client.crypto.decrypt(v)));
-            }
-
-            return [];
-        } catch(e) {
-            console.error("[Database]", `Failed to get the texts of guild ${this.guildId}:\n`, e);
         }
     }
 
