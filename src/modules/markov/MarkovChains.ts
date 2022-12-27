@@ -64,6 +64,8 @@ export default class MarkovChains {
         let splittedWords: string[] = text.split(/ +/g);
         splittedWords.forEach((word, i) => {
             let wordKey = this.parseKey(word);
+            if (!wordKey) return;
+
             let nextWord = splittedWords[i + 1];
 
             if (!this.wordList[wordKey]) {
@@ -72,6 +74,7 @@ export default class MarkovChains {
                     list: []
                 }
             }
+
             if (nextWord) this.wordList[wordKey].list.push(nextWord);
         });
     }
@@ -82,7 +85,11 @@ export default class MarkovChains {
      * @returns Filtered word.
      */
     private parseKey(word: string): string {
-        return word.replace(/[<>()[\]{}:;\.,]/g, "");
+        // Only replace if there are any letters
+        if (/\w/.test(word))
+            return word.replace(/[<>()[\]{}:;\.,]/g, "");
+
+        return word;
     }
 
     /**
@@ -104,7 +111,8 @@ export default class MarkovChains {
         });
 
         // Deletes punctuations at beginning and end
-        text = text.replace(/^[\.,; ]+/g, "").replace(/[, ]+$/g, "");
+        if (/\w/.test(text))
+            text = text.replace(/^[\.,; ]+/g, "").replace(/[, ]+$/g, "");
 
         return text;
     }
