@@ -101,7 +101,10 @@ export default class DeleteTextsCommand extends Command {
                                 currentPage = 0;
 
                                 components = this.getPageComponents(interaction.user.id, texts, !!member, currentPage, itemsPerPage, interaction.locale);
-                                await replyMessage.edit({ components });
+
+                                try {
+                                    await replyMessage.edit({ components });
+                                } catch {};
                             } catch(e) {
                                 await confirmInteraction.update({
                                     content: this.t("vars.error", lng)
@@ -204,8 +207,12 @@ export default class DeleteTextsCommand extends Command {
                         
                         components = this.getPageComponents(interaction.user.id, texts, !!member, currentPage, itemsPerPage, interaction.locale);
 
-                        await replyMessage.edit({ components });
-                    } catch {
+                        try {
+                            await replyMessage.edit({ components });
+                        } catch {};
+                    } catch(e) {
+                        console.error(`[Commands] Failed to reply the interaction:\n`, e);
+
                         await b.reply({
                             content: this.t("vars.error", lng),
                             ephemeral: true
@@ -224,10 +231,12 @@ export default class DeleteTextsCommand extends Command {
                     }
                 }
 
-                await replyMessage.edit({
-                    content: this.t("commands.deleteTexts.texts.expired", lng),
-                    components: rows
-                });
+                try {
+                    await replyMessage.edit({
+                        content: this.t("commands.deleteTexts.texts.expired", lng),
+                        components: rows
+                    });
+                } catch {};
             }
         });
     }
@@ -239,10 +248,13 @@ export default class DeleteTextsCommand extends Command {
         const options: MessageSelectOption[] = [];
 
         items.forEach((v) => {
+            const label = v.decrypted.slice(0, 100);
+            if (label.length < 0) return;
+
             const addedAt = new Date(SnowflakeUtil.timestampFrom(v.id));
 
             options.push({
-                label: v.decrypted.slice(0, 100),
+                label,
                 description: this.t("commands.deleteTexts.texts.textInfo", { lng: locale, author: v.author ?? "???", date: addedAt.toLocaleString(locale) }),
                 value: v.id,
                 default: false,
