@@ -27,10 +27,12 @@ export default class InfoCommand extends Command {
         const database = await this.client.database.fetch(interaction.guildId);
         const isBanned = await this.client.database.isBanned(interaction.guildId);
         const isTracking = await this.client.database.isTrackAllowed(interaction.user.id);
+        const serverCount = (await this.client.shard.fetchClientValues("guilds.cache.size") as number[])
+            .reduce((a, b) => a + b);
 
         // Basic info
         let description = this.t("commands.info.texts.online", { ...lng, time: `<t:${Math.floor(this.client.readyTimestamp / 1000)}:R>` }) + "\n";
-        description    += this.t("commands.info.texts.serverSize", { ...lng, size: this.client.guilds.cache.size }) + "\n";
+        description    += this.t("commands.info.texts.serverSize", { ...lng, size: serverCount }) + "\n";
         description    += this.t("commands.info.texts.tracking", {
             ...lng,
             state: isTracking ? this.t("vars.enabled", lng) : this.t("vars.disabled", lng)
@@ -167,6 +169,10 @@ export default class InfoCommand extends Command {
                     style: "LINK"
                 })
             );
+
+        embed.setFooter({
+            text: `Shard ${interaction.guild.shardId}`
+        });
 
         return interaction.editReply({ embeds: [ embed ], components: [ cRow, docsRow ] });
     }

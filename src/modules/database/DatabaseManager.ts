@@ -33,6 +33,14 @@ export default class DatabaseManager {
                 }
             });
         }, sweepInterval);
+
+        setInterval(async () => {
+            try {
+                await TextsModel.deleteMany({ expiresAt: { $lte: Date.now() } }).exec();
+            } catch(e) {
+                console.error("[Database]", "Failed to delete inactive texts:\n", e);
+            }
+        }, 24 * 1000 * 60 * 60);
     }
 
     /**

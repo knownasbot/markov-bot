@@ -1,6 +1,5 @@
 import Event from "../structures/Event";
 import CommandHandler from "../handlers/CommandHandler";
-import TextsModel from "../modules/database/models/TextsModel";
 import * as status from "./status.json";
 
 import { ActivitiesOptions } from "discord.js/typings";
@@ -14,11 +13,8 @@ export default class Ready extends Event {
     }
 
     run(client: ClientInterface): void {
-        console.log("[Bot]", `Connected to the Discord.`);
-
         new CommandHandler(client);
 
-        // Random activity
         if (process.env.TOPGG_TOKEN) {
             this.randomTexts.push("vote me on top.gg 🥺");
         }
@@ -26,9 +22,7 @@ export default class Ready extends Event {
         client.user.setPresence({ activities: [ this.getRandomText() ] });
         setInterval(() => {
             client.user.setPresence({ activities: [ this.getRandomText() ] });
-        }, 60*60*1000);
-
-        setInterval(() => this.deleteInactiveTexts(), 24 * 1000 * 60 * 60);
+        }, 60 * 60 * 1000);
     }
 
     /**
@@ -42,16 +36,5 @@ export default class Ready extends Event {
         }
 
         return randomPresence;
-    }
-
-    /**
-     * It deletes texts documents with old activity.
-     */
-    private async deleteInactiveTexts(): Promise<void> {
-        try {
-            await TextsModel.deleteMany({ expiresAt: { $lte: Date.now() } }).exec();
-        } catch(e) {
-            console.error("[Database]", "Failed to delete inactive texts:\n", e);
-        }
     }
 }
