@@ -84,14 +84,22 @@ export default class Interaction extends Event {
                     }
                 });
             } else if (interaction.customId == "faq") {
+                const commands = await client.application.commands.fetch();
+
+                const deleteCommandName = t("commands.deleteTexts.command.name");
+                const trackingCommandName = t("commands.tracking.command.name");
+
+                const deleteCommand = commands.find((v) => v.name == deleteCommandName);
+                const trackingCommand = commands.find((v) => v.name == trackingCommandName);
+
                 const translation: FAQ = t("events.faq", {
                     ...lng,
                     returnObjects: true,
 
                     contact: `**${client.config.emojis.twitter} [@knownasbot](https://twitter.com/knownasbot)**`,
                     friendURL: "https://twitter.com/lukefl_",
-                    deleteCommand: "/" + t("commands.deleteTexts.command.name", lng),
-                    trackingCommand: "/" + t("commands.tracking.command.name", lng),
+                    deleteCommand: `</${deleteCommandName}:${deleteCommand.id}>`,
+                    trackingCommand: `</${trackingCommandName}:${trackingCommand.id}>`,
                     parameter: t("commands.deleteTexts.command.options.0.name", lng)
                 });
 

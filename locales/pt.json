@@ -273,18 +273,18 @@
         }
     },
     "events": {
-        "welcome": "**Obrigado por me adicionar no servidor!**\n\nDigite `{{channelCommand}}` para configurar o canal, e logo após digite `{{enableCommand}}` para me habilitar 😁. Após a coleta de no mínimo {{min}} mensagens, começarei a gerar conteúdo 👀. Digite `{{infoCommand}}` para ter mais informações.\n\nA cada 30 dias de inatividade deletamos os textos armazenados. Caso queira deletar os textos, utilize `{{deleteCommand}}`. O parâmetro `{{member}}` pode ser utilizado pelo autor do comando ou quem tiver permissão de gerenciar mensagens.",
+        "welcome": "**Obrigado por me adicionar no servidor!**\n\nDigite {{channelCommand}} para configurar o canal, e logo após digite {{enableCommand}} para me habilitar 😁. Após a coleta de no mínimo {{min}} mensagens, começarei a gerar conteúdo 👀. Digite {{infoCommand}} para ter mais informações.\n\nA cada 30 dias de inatividade deletamos os textos armazenados. Caso queira deletar os textos, utilize {{deleteCommand}}.",
         "faq": {
             "title": "FAQ",
             "description": "Dúvidas? Talvez isto te ajude. Dúvidas não listadas podem ser questionadas no meu servidor.",
             "fields": [
                 {
                     "name": "Como deleto mensagens armazenadas?",
-                    "value": "Você pode deletar mensagens armazenadas utilizando o comando `{{deleteCommand}}`. Passando o parâmetro `{{parameter}}`, é possível deletar as mensagens suas ou de algum membro."
+                    "value": "Você pode deletar mensagens armazenadas utilizando o comando {{deleteCommand}}. Passando o parâmetro `{{parameter}}`, é possível deletar as mensagens suas ou de algum membro."
                 },
                 {
                     "name": "Como evito a coleta das minhas mensagens?",
-                    "value": "Para desabilitar a coleta de suas mensagens digite `{{trackingCommand}}`. Digita o mesmo comando para habilitar novamente."
+                    "value": "Para desabilitar a coleta de suas mensagens digite {{trackingCommand}}. Digita o mesmo comando para habilitar novamente."
                 },
                 {
                     "name": "As mensagens são atualizadas?",

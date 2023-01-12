@@ -27,12 +27,17 @@ export default class GuildCreate extends Event {
             const { t } = client.i18n;
             const lng = { lng: guild.preferredLocale };
 
-            const configName = t("commands.config.command.name", lng);
-            const channelName = t("commands.channel.command.name", lng);
-            const enableName = t("commands.enable.command.name", lng);
-            const infoName = t("commands.info.command.name", lng);
-            const deleteCommand: deleteCommandOptions = t("commands.deleteTexts.command", { ...lng, returnObjects: true });
+            const infoCommandName = t("commands.info.command.name");
+            const configCommandName = t("commands.config.command.name");
+            const enableCommandName = t("commands.enable.command.name");
+            const channelCommandName = t("commands.channel.command.name");
+            const deleteCommandName = t("commands.deleteTexts.command.name");
         
+            const commands = await client.application.commands.fetch();
+            const infoCommand = commands.find((v) => v.name == infoCommandName);
+            const configCommand = commands.find((v) => v.name == configCommandName);
+            const deleteCommand = commands.find((v) => v.name == deleteCommandName);
+
             try {
                 const row = new MessageActionRow()
                     .addComponents(
@@ -59,11 +64,10 @@ export default class GuildCreate extends Event {
                 await guild.systemChannel.send({
                     content: t("events.welcome", {
                         ...lng,
-                        channelCommand: `/${configName} ${channelName}`,
-                        enableCommand: `/${configName} ${enableName}`,
-                        infoCommand: `/${infoName}`,
-                        deleteCommand: `/${deleteCommand.name}`,
-                        member: deleteCommand.options[0].name,
+                        infoCommand: `</${infoCommandName}:${infoCommand.id}>`,
+                        channelCommand: `</${configCommandName} ${channelCommandName}:${configCommand.id}>`,
+                        enableCommand: `</${configCommandName} ${enableCommandName}:${configCommand.id}>`,
+                        deleteCommand: `</${deleteCommandName}:${deleteCommand.id}>`,
                         min: 5
                     }),
                     components: [ row ]

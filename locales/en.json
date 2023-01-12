@@ -273,18 +273,18 @@
         }
     },
     "events": {
-        "welcome": "**Thanks for adding me to the server!**\n\nType `{{channelCommand}}` to set up a channel and then `{{enableCommand}}` to enable me 😁. After collecting {{min}} messages, I'll start generating content 👀. Type `{{infoCommand}}` for more information.\n\nFor every 30 days of inactivity we delete the stored texts. If you want to delete the texts, use the command `{{deleteCommand}}`. The parameter `{{member}}` can be used by the command user or whoever has the message management permission.",
+        "welcome": "**Thanks for adding me to the server!**\n\nType {{channelCommand}} to set up a channel and then {{enableCommand}} to enable me 😁. After collecting {{min}} messages, I'll start generating content 👀. Type {{infoCommand}} for more information.\n\nFor every 30 days of inactivity we delete the stored texts. If you want to delete the texts, use the command {{deleteCommand}}.",
         "faq": {
             "title": "FAQ",
             "description": "Questions? Maybe this can help you. Unlisted questions can be asked in my server.",
             "fields": [
                 {
                     "name": "How do I delete stored messages?",
-                    "value": "You can delete stored messages using the command `{{deleteCommand}}`. Providing the parameter `{{parameter}}` allows you to delete messages from yourself or a member."
+                    "value": "You can delete stored messages using the command {{deleteCommand}}. Providing the parameter `{{parameter}}` allows you to delete messages from yourself or a member."
                 },
                 {
                     "name": "I don't want it to collect my messages!",
-                    "value": "To disable the collection of your messages, type `{{trackingCommand}}`. Type the same command to enable it again."
+                    "value": "To disable the collection of your messages, type {{trackingCommand}}. Type the same command to enable it again."
                 },
                 {
                     "name": "Are the messages updated?",
