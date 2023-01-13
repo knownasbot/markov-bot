@@ -17,8 +17,6 @@ export default class InfoCommand extends Command {
     }
 
     async run(interaction: CommandInteraction) {
-        if (interaction.channel.type != "GUILD_TEXT") return;
-
         await interaction.deferReply();
 
         const lng = { lng: interaction.locale };

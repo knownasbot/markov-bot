@@ -16,7 +16,6 @@ export default class MessageCreate extends Event {
             message.author.bot ||
             !message.content ||
             message.content.trim().length < 1 ||
-            message.channel.type != "GUILD_TEXT" ||
             await client.database.isBanned(message.guildId)
         ) return;
 
