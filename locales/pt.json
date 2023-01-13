@@ -48,10 +48,7 @@
                     }
                 ]
             },
-            "texts": {
-                "error": "O canal fornecido deve ser de texto.",
-                "success": "O canal {{channel}} foi configurado para ser enviado e coletado mensagens."
-            }
+            "text": "O canal {{channel}} foi configurado para ser enviado e coletado mensagens."
         },
         "config": {
             "command": {

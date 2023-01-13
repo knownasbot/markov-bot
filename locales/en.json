@@ -48,10 +48,7 @@
                     }
                 ]
             },
-            "texts": {
-                "error": "The channel type provided must be text.",
-                "success": "The channel {{channel}} has been defined to collect and send messages."
-            }
+            "text": "The channel {{channel}} has been defined to collect and send messages."
         },
         "config": {
             "command": {

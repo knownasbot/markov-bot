@@ -14,6 +14,7 @@ export default class ChannelSubCommand extends SubCommand {
                     type: "CHANNEL",
                     name: "commands.channel.command.options.0.name",
                     description: "commands.channel.command.options.0.description",
+                    channelTypes: [ "GUILD_TEXT", "GUILD_PUBLIC_THREAD", "GUILD_PRIVATE_THREAD" ],
                     required: true
                 }
             ]
@@ -23,16 +24,12 @@ export default class ChannelSubCommand extends SubCommand {
     async run(interaction: CommandInteraction) {
         const lng = { lng: interaction.locale };
         const channel = interaction.options.getChannel(this.options[0].name);
-        if (channel.type !== "GUILD_TEXT") {
-            return interaction.reply(this.t("commands.channel.texts.error", lng));
-        }
-
         const database = await this.client.database.fetch(interaction.guildId);
 
         try {
             await database.configChannel(channel.id);
 
-            return await interaction.reply(this.t("commands.channel.texts.success", { ...lng, channel: `<#${channel.id}>` }));
+            return await interaction.reply(this.t("commands.channel.text", { ...lng, channel: `<#${channel.id}>` }));
         } catch (e) {
             return await interaction.reply(this.t("vars.error", lng));
         }
