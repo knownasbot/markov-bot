@@ -2,7 +2,7 @@ import axios from "axios";
 import { MessageEmbed, MessageActionRow, MessageButton, version } from "discord.js";
 import Command from "../structures/Command";
 
-import { CommandInteraction } from "discord.js/typings";
+import { CommandInteraction, TextChannel } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
 export default class InfoCommand extends Command {
@@ -42,7 +42,7 @@ export default class InfoCommand extends Command {
             .setDescription(description);
 
         // Server related info
-        const channelId = await database.getChannel();
+        let channelId = await database.getChannel();
 
         let webhook = await database.getWebhook();
         let webhookName;
@@ -64,7 +64,17 @@ export default class InfoCommand extends Command {
             }
         }
 
-        const channel = await interaction.guild.channels.fetch(channelId);
+        let channel: TextChannel;
+        try {
+            channel = await interaction.guild.channels.fetch(channelId) as TextChannel;
+        } catch(e) {
+            // Unknown channel
+            if (e.code == 10003) {
+                channelId = null;
+                database.configChannel(null);
+            }
+        }
+
         const messagePermission = (
             channel?.permissionsFor &&
             channel.permissionsFor(interaction.guild.me)?.has("SEND_MESSAGES") &&
