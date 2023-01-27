@@ -85,12 +85,12 @@ export default class MarkovChains {
      * @returns Filtered word.
      */
     private parseKey(word: string): string {
-        if (word == "constructor" || word == "__proto__")
-            word += "_";
-
         // Only replace if there are any letters
         if (/\w/.test(word))
-            return word.replace(/[<>()[\]{}:;\.,]/g, "");
+            word = word.replace(/[<>()[\]{}:;\.,]/g, "");
+
+        if (word == "constructor" || word == "__proto__")
+            word += "_";
 
         return word;
     }
