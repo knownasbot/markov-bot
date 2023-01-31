@@ -249,7 +249,7 @@ export default class DeleteTextsCommand extends Command {
 
         items.forEach((v) => {
             const label = v.decrypted.slice(0, 100);
-            if (label.length < 0) return;
+            if (label.length < 0 || options.findIndex((opt) => opt.value == v.id) != -1) return;
 
             const addedAt = new Date(SnowflakeUtil.timestampFrom(v.id));
 
