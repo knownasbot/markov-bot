@@ -180,6 +180,8 @@ export default class DeleteTextsCommand extends Command {
                         })
                     );
 
+                if (text.decrypted.length > 2000) text.decrypted = text.decrypted.slice(0, 2000 -3) + "...";
+
                 const m = await i.reply({
                     content: text.decrypted,
                     ephemeral: true,
