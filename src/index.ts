@@ -13,8 +13,6 @@ import * as path from "path";
 import axios from "axios";
 import { ShardingManager } from "discord.js";
 
-import TextsModel from "./modules/database/models/TextsModel";
-
 export default new class MarkovBOT {
     public manager = new ShardingManager(
         path.join(__dirname, process.env.NODE_ENV == "dev" ? "bot.ts" : "bot.js"),
