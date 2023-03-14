@@ -90,6 +90,7 @@ export default class GuildCreate extends Event {
                 .setThumbnail(guild.iconURL())
                 .setColor(0x32d35b)
                 .setDescription(description)
+                .setFooter({ text: "Shard " + guild.shardId })
                 .setTimestamp();
 
             return this.webhook.send({ embeds: [ embed ] })

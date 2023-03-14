@@ -37,6 +37,7 @@ export default class GuildDelete extends Event {
                 .setThumbnail(guild.iconURL())
                 .setColor(0xd33235)
                 .setDescription(description)
+                .setFooter({ text: "Shard " + guild.shardId })
                 .setTimestamp();
 
             return this.webhook.send({ embeds: [ embed ] })
