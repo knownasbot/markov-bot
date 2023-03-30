@@ -1,11 +1,9 @@
 import "../../utils/deleteAt";
 
-interface WordList {
-    [word: string]: {
-        original: string;
-        list: string[];
-    }
-}
+type WordList = Map<string, {
+    original: string;
+    list: string[];
+}>;
 
 export default class MarkovChains {
     public wordList: WordList;
@@ -14,7 +12,7 @@ export default class MarkovChains {
      * @param wordList A custom dictionary.
      */
     constructor(wordList?: WordList) {
-        this.wordList = wordList ?? {};
+        this.wordList = wordList ?? new Map();
     }
 
     /**
@@ -22,7 +20,7 @@ export default class MarkovChains {
      * @param texts An array of texts.
      */
     generateDictionary(texts: string[]): void {
-        this.wordList = {};
+        this.wordList = new Map();
         texts.forEach(text => this.pickWords(text));
     }
 
@@ -32,13 +30,13 @@ export default class MarkovChains {
      * @returns Generated sentence.
      */
     generateChain(max: number): string {
-        let wordArray = Object.keys(this.wordList);
+        let wordArray = Array.from(this.wordList.keys());
         if (wordArray.length < 1) return;
 
         let lastWord: string;
         let generatedWords: string[] = [];
         while (!lastWord) {
-            lastWord = this.wordList[wordArray[Math.floor(Math.random() * wordArray.length)]].original;
+            lastWord = this.wordList.get(wordArray[Math.floor(Math.random() * wordArray.length)]).original;
         }
         
         generatedWords.push(lastWord);
@@ -46,7 +44,7 @@ export default class MarkovChains {
         for (let i=0; i < max - 1; i++) {
             if (!lastWord) break;
 
-            const nextWord = this.wordList[this.parseKey(lastWord)];
+            const nextWord = this.wordList.get(this.parseKey(lastWord));
             if (!nextWord) break;
             lastWord = nextWord.list[Math.floor(Math.random() * nextWord.list.length)];
 
@@ -68,14 +66,14 @@ export default class MarkovChains {
 
             let nextWord = splittedWords[i + 1];
 
-            if (!this.wordList[wordKey]) {
-                this.wordList[wordKey] = {
+            if (!this.wordList.get(wordKey)) {
+                this.wordList.set(wordKey, {
                     original: word,
                     list: []
-                }
+                });
             }
 
-            if (nextWord) this.wordList[wordKey].list.push(nextWord);
+            if (nextWord) this.wordList.get(wordKey).list.push(nextWord);
         });
     }
 
@@ -88,9 +86,6 @@ export default class MarkovChains {
         // Only replace if there are any letters
         if (/\w/.test(word))
             word = word.replace(/[<>()[\]{}:;\.,]/g, "");
-
-        if (word == "constructor" || word == "__proto__")
-            word += "_";
 
         return word;
     }
