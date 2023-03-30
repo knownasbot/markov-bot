@@ -24,7 +24,7 @@ export default class GenerateCommand extends Command {
     async run(interaction: CommandInteraction) {
         const database = await this.client.database.fetch(interaction.guildId);
 
-        const size = interaction.options.getInteger(this.options[0].name) ?? Math.floor(Math.random() * 30);
+        const size = interaction.options.getInteger(this.options[0].name) ?? Math.floor(Math.random() * 50);
         const textsLength = await database.getTextsLength();
 
         let generatedText = database.markovChains.generateChain(size);

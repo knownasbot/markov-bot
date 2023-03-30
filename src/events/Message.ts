@@ -62,7 +62,7 @@ export default class MessageCreate extends Event {
                     } catch {};
                 }
 
-                let generatedText = database.markovChains.generateChain(Math.floor(Math.random() * 30));
+                let generatedText = database.markovChains.generateChain(Math.floor(Math.random() * 50));
                 if (generatedText && generatedText.trim().length > 0) {
                     let timeout = Math.floor(5 + Math.random() * 5) * 1000;
 
