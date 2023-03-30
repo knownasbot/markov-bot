@@ -29,7 +29,7 @@ export default class MessageCreate extends Event {
 
         const channelId = await database.getChannel();
         const webhook = await database.getWebhook();
-        const messagePermission = channel?.permissionsFor && channel?.permissionsFor(message.guild.me)?.has("SEND_MESSAGES");
+        const messagePermission = channel?.permissionsFor && channel?.permissionsFor(message.guild.members.me)?.has("SEND_MESSAGES");
 
         if (message.channel && message.channelId == channelId && messagePermission) {
             const hasMention = message.mentions.has(client.user);
