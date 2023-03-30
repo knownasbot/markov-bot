@@ -12,6 +12,7 @@ if (!process.env.BOT_TOKEN && !process.env.TEST_BOT_TOKEN) {
 import * as path from "path";
 import axios from "axios";
 import { ShardingManager } from "discord.js";
+import { ChildProcess } from "child_process";
 
 export default new class MarkovBOT {
     public manager = new ShardingManager(
@@ -32,7 +33,9 @@ export default new class MarkovBOT {
                 console.log(shardTag, "Connected to Discord.");
             });
             shard.on("disconnect", () => console.log(shardTag, "Disconnected."));
-            shard.on("death", () => console.log(shardTag, "Shard died."));
+            shard.on("death", (p: ChildProcess) => {
+                console.log(shardTag, `Shard died. (exit code: ${p.exitCode})`);
+            });
         });
 
         this.manager.spawn();
