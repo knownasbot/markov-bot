@@ -75,10 +75,10 @@ export default class InfoCommand extends Command {
             }
         }
 
+        const clientMember = await interaction.guild.members.fetchMe();
         const messagePermission = (
-            channel?.permissionsFor &&
-            channel.permissionsFor(interaction.guild.me)?.has("SEND_MESSAGES") &&
-            channel.permissionsFor(interaction.guild.me)?.has("VIEW_CHANNEL")
+            clientMember.permissionsIn(channel)?.has("SEND_MESSAGES") &&
+            clientMember.permissionsIn(channel)?.has("VIEW_CHANNEL")
         );
 
         let serverInfo;
