@@ -66,7 +66,9 @@ export default class InfoCommand extends Command {
 
         let channel: TextChannel;
         try {
-            channel = await interaction.guild.channels.fetch(channelId) as TextChannel;
+            if (channelId) {
+                channel = await interaction.guild.channels.fetch(channelId) as TextChannel;
+            }
         } catch(e) {
             // Unknown channel
             if (e.code == 10003) {
@@ -75,8 +77,9 @@ export default class InfoCommand extends Command {
             }
         }
 
-        const clientMember = await interaction.guild.members.fetchMe();
+        const clientMember = channel && await interaction.guild.members.fetchMe();
         const messagePermission = (
+            channel &&
             clientMember.permissionsIn(channel)?.has("SEND_MESSAGES") &&
             clientMember.permissionsIn(channel)?.has("VIEW_CHANNEL")
         );
