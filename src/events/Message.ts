@@ -2,7 +2,7 @@ import { WebhookClient } from "discord.js";
 import Event from "../structures/Event";
 import specialEventList from "../modules/specialEvents";
 
-import { Message } from "discord.js/typings";
+import { Message, TextChannel } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 import SpecialEventInterface from "../interfaces/SpecialEventInterface";
 
@@ -22,17 +22,19 @@ export default class MessageCreate extends Event {
         const database = await client.database.fetch(message.guildId);
         if (!database.toggledActivity) return;
 
-        let channel;
+        let channel: TextChannel;
         try {
-            channel = await message.channel?.fetch();
-        } catch {};
+            channel = await message.channel?.fetch() as TextChannel;
+        } catch {
+            return;
+        }
 
         const channelId = await database.getChannel();
         const webhook = await database.getWebhook();
         const clientMember = await message.guild.members.fetchMe();
         const messagePermission = clientMember.permissionsIn(channel)?.has("SEND_MESSAGES");
 
-        if (message.channel && message.channelId == channelId && messagePermission) {
+        if (channel && message.channelId == channelId && messagePermission) {
             const hasMention = message.mentions.has(client.user);
             const textsLength = await database.getTextsLength();
             let guildCooldown = client.cooldown.get(message.guildId) ?? 0;
@@ -69,12 +71,12 @@ export default class MessageCreate extends Event {
 
                     if (!webhook) {
                         try {
-                            await message.channel.sendTyping();
+                            await channel.sendTyping();
 
                             setTimeout(async () => {
                                 try {
                                     if (hasMention) await message.reply(generatedText)
-                                    else await message.channel.send(generatedText);
+                                    else await channel.send(generatedText);
                                 } catch {}; // Probably has no permission
                             }, timeout);
                         } catch {}; // Probably has no permission
