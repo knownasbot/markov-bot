@@ -6,25 +6,42 @@ import TextsModel from "./models/TextsModel";
 
 import ClientInterface from "../../interfaces/ClientInterface";
 
-interface BanInterface {
-    lastActivity: number;
-    reason: string;
-};
-
 interface NoTrackInterface {
     lastActivity: number;
     toggled: boolean;
 };
 
-type CacheType = BanInterface | NoTrackInterface | GuildDatabase;
+type CacheType = NoTrackInterface | GuildDatabase;
+type Guildban = {
+    type: "ban" | "unban";
+    guildId: string;
+    reason: string;
+};
 
 export default class DatabaseManager {
     public cache = new Map<string, CacheType>();
 
+    private bans = new Map<string, string>();
     private client: ClientInterface;
 
     constructor(client: ClientInterface, sweepInterval: number = 10 * 60 * 60 * 1000) {
         this.client = client;
+
+        this.fetchBans()
+            .catch((e) => {
+                console.error("[Database]", "Failed to fetch the bans:\n", e);
+            });
+
+        // Listens to all IPC messages sent by another shards
+        process.on("message", (message:  | any) => {
+            if (!message.guildId) return;
+
+            if (message.type == "ban") {
+                this.bans.set(message.guildId, message.reason);
+            } else if (message.type == "unban") {
+                this.bans.delete(message.guildId);
+            }
+        });
 
         setInterval(() => {
             this.cache.forEach((v, k) => {
@@ -88,8 +105,12 @@ export default class DatabaseManager {
             await BansModel.findOneAndUpdate({ guildId }, { reason }, { upsert: true, new: true }).exec();
             await this.delete(guildId);
 
-            this.cache.set("ban-" + guildId, {
-                lastActivity: Date.now(),
+            this.bans.set(guildId, reason);
+
+            // Broadcasts the ban to all shards via IPC
+            process.send({
+                type: "ban",
+                guildId,
                 reason
             });
 
@@ -109,7 +130,13 @@ export default class DatabaseManager {
         try {
             await BansModel.deleteOne({ guildId },).exec();
 
-            this.cache.delete("ban-" + guildId);
+            this.bans.delete(guildId);
+
+            // Broadcasts the ban to all shards via IPC
+            process.send({
+                type: "unban",
+                guildId
+            });
 
             return;
         } catch(e) {
@@ -125,28 +152,7 @@ export default class DatabaseManager {
      * @returns The ban reason if banned.
      */
      async isBanned(guildId: string): Promise<string | void> {
-        const banned = this.cache.get("ban-" + guildId) as BanInterface;
-
-        if (banned) {
-            return banned.reason;
-        } else {
-            try {
-                const query = await BansModel.findOne({ guildId });
-
-                if (query?.reason) {
-                    this.cache.set("ban-" + guildId, {
-                        lastActivity: Date.now(),
-                        reason: query?.reason
-                    });
-
-                    return query?.reason;
-                }
-            } catch(e) {
-                console.error("[Database]", `Failed to check ban of guild ${guildId}:\n`, e);
-
-                throw e;
-            }
-        }
+        return this.bans.get(guildId);
     }
 
     /**
@@ -222,5 +228,15 @@ export default class DatabaseManager {
                 throw e;
             }
         }
+    }
+
+    private async fetchBans() {
+        const query = await BansModel.find({}).exec();
+
+        for (let guild of query) {
+            this.bans.set(guild.guildId, guild.reason);
+        }
+
+        return;
     }
 }

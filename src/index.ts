@@ -32,6 +32,14 @@ export default new class MarkovBOT {
             shard.on("ready", () => {
                 console.log(shardTag, "Connected to Discord.");
             });
+
+            // Listens to shards IPC messages. Used to share the new bans.
+            shard.on("message", (message) => {
+                if (message?.type != "ban" && message?.type != "unban") return;
+
+                this.manager.broadcast(message);
+            });
+
             shard.on("disconnect", () => console.log(shardTag, "Disconnected."));
             shard.on("death", (p: ChildProcess) => {
                 console.log(shardTag, `Shard died. (exit code: ${p.exitCode})`);
