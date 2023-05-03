@@ -4,13 +4,6 @@ import Event from "../structures/Event";
 import { Guild } from "discord.js/typings";
 import ClientInterface from "../interfaces/ClientInterface";
 
-interface deleteCommandOptions {
-    name: string;
-    options: {
-        name: string
-    }[];
-};
-
 export default class GuildCreate extends Event {
     private webhook: WebhookClient;
 
@@ -87,7 +80,6 @@ export default class GuildCreate extends Event {
 
             const embed = new MessageEmbed()
                 .setTitle(guild?.name ?? "Unknown")
-                .setThumbnail(guild.iconURL())
                 .setColor(0x32d35b)
                 .setDescription(description)
                 .setFooter({ text: "Shard " + guild.shardId })
