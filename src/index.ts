@@ -11,7 +11,7 @@ if (!process.env.BOT_TOKEN && !process.env.TEST_BOT_TOKEN) {
 
 import * as path from "path";
 import axios from "axios";
-import { ShardingManager } from "discord.js";
+import { ShardingManager, MessageEmbed, WebhookClient } from "discord.js";
 import { ChildProcess } from "child_process";
 
 export default new class MarkovBOT {
@@ -23,14 +23,38 @@ export default new class MarkovBOT {
         }
     );
 
+    private webhook?: WebhookClient;
+
     constructor() {
         this.manager.on("shardCreate", (shard) => {
             const shardTag = `[Shard ${shard.id}]`;
 
             console.log(shardTag, "Starting new shard...");
 
+            if (this.webhook) {
+                let embed = new MessageEmbed()
+                    .setTitle("Shard status")
+                    .setColor(0xedca31)
+                    .setDescription(`Shard ${shard.id} is starting.`)
+                    .setTimestamp();
+
+                this.webhook.send({ embeds: [ embed ] })
+                    .catch(e => console.error("[Webhook Log]", e));
+            }
+
             shard.on("ready", () => {
                 console.log(shardTag, "Connected to Discord.");
+
+                if (this.webhook) {
+                    let embed = new MessageEmbed()
+                        .setTitle("Shard status")
+                        .setColor(0x32d35b)
+                        .setDescription(`Shard ${shard.id} just connected to Discord.`)
+                        .setTimestamp();
+    
+                    this.webhook.send({ embeds: [ embed ] })
+                        .catch(e => console.error("[Webhook Log]", e));
+                }
             });
 
             // Listens to shards IPC messages. Used to share the new bans.
@@ -40,9 +64,34 @@ export default new class MarkovBOT {
                 this.manager.broadcast(message);
             });
 
-            shard.on("disconnect", () => console.log(shardTag, "Disconnected."));
+            shard.on("disconnect", () => {
+                console.log(shardTag, "Disconnected.");
+
+                if (this.webhook) {
+                    let embed = new MessageEmbed()
+                        .setTitle("Shard status")
+                        .setColor(0xd33235)
+                        .setDescription(`Shard ${shard.id} just disconnected.`)
+                        .setTimestamp();
+    
+                    this.webhook.send({ embeds: [ embed ] })
+                        .catch(e => console.error("[Webhook Log]", e));
+                }
+            });
+
             shard.on("death", (p: ChildProcess) => {
                 console.log(shardTag, `Shard died. (exit code: ${p.exitCode})`);
+
+                if (this.webhook) {
+                    let embed = new MessageEmbed()
+                        .setTitle("Shard status")
+                        .setColor(0xd33235)
+                        .setDescription(`Shard ${shard.id} died with exit code ${p.exitCode}.`)
+                        .setTimestamp();
+    
+                    this.webhook.send({ embeds: [ embed ] })
+                        .catch(e => console.error("[Webhook Log]", e));
+                }
             });
         });
 
@@ -76,6 +125,10 @@ export default new class MarkovBOT {
                     }
                 }
             }, 60 * 60 * 1000);
+        }
+
+        if (process.env.SERVER_LOG) {
+            this.webhook = new WebhookClient({ url: process.env.SERVER_LOG });
         }
     }
 }
