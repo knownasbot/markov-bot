@@ -34,7 +34,6 @@ export default class GuildDelete extends Event {
 
             const embed = new MessageEmbed()
                 .setTitle(guild?.name ?? "Unknown")
-                .setThumbnail(guild.iconURL())
                 .setColor(0xd33235)
                 .setDescription(description)
                 .setFooter({ text: "Shard " + guild.shardId })
