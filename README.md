@@ -42,6 +42,16 @@ After configuring the environment, build the bot code to JavaScript with the com
 
 Start the bot with `npm start` and have fun!
 
+### Docker Setup
+First you need to have Docker and Docker-Compose installed in you're pc.
+- You can view the Docker Installation Docs be clicking [here](https://docs.docker.com/engine/install/).
+- Also the Docker Compose Docs can be viewed by clicking [here](https://docs.docker.com/compose/install/).
+
+After the Docker Setup you need open a terminal inside Docker Folder where you cloned the repo to build the docker container be using `docker build --no-cache -t knownasbot/markov-bot .`.
+
+When the process of build is finished you can run the bot docker container by using the following method:
+- `docker-compose up -d` but require you need to change the `.env.example` to `.env` and fill the variables `BOT_TOKEN`, `DB_URI` and `CRYPTO_SECRET` [like sayed above](https://github.com/knownasbot/markov-bot#configuring-the-environment).
+
 ## Contributing
 If you want to contribute by improving the code or translating texts to other languages, see the **[Contributing](/CONTRIBUTING.md)** before doing anything.
 

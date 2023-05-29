@@ -1,0 +1,6 @@
+version: '3.1'
+services:
+    markov:
+        image: knownasbot/markov-bot
+        env_file:
+            - .env
