@@ -1,0 +1,10 @@
+version: '3.1'
+services:
+  markov_bot:
+    image: "node:18"
+    working_dir: /workspace/node/markov-bot
+    env_file:
+      - .env 
+    volumes:
+      - ./:/workspace/node/markov-bot
+    command: "npm run docker-run"

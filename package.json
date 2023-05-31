@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev ts-node ./src/index.ts",
     "build": "tsc",
-    "start": "node ./dist"
+    "start": "node ./dist",
+    "docker-run": "npm install && npm run build && npm run start"
   },
   "author": "knownasbot",
   "license": "MIT",
